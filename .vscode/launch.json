@@ -1,0 +1,39 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": ".NET Framework",
+            "type": "clr",
+            "request": "attach",
+            "processId": "${command:pickProcess}"
+        },
+        {
+          "name": "Attach to Revit",
+          "type": "coreclr",
+          "request": "attach",
+          "processName": "revit.exe",
+          "justMyCode": true
+      },
+        {
+            "name": "Revit2024 DEBUG Launch",
+            "type": "clr",
+            "request": "launch",
+            "program": "",
+            "windows": {
+              "program": "C:\\Program Files\\Autodesk\\Revit 2024\\Revit.exe",
+              "targetArchitecture": "x86_64",
+              "args": [
+                
+              ]
+            },
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false,
+            "console": "internalConsole",
+            "justMyCode": true,
+            "suppressJITOptimizations": true,
+          },
+    ]
+}

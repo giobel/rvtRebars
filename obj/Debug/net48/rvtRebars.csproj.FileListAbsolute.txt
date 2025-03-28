@@ -1,0 +1,5 @@
+C:\Repos\rvtRebars\obj\Debug\net48\rvtRebars.csproj.AssemblyReference.cache
+C:\Repos\rvtRebars\obj\Debug\net48\rvtRebars.GeneratedMSBuildEditorConfig.editorconfig
+C:\Repos\rvtRebars\obj\Debug\net48\rvtRebars.AssemblyInfoInputs.cache
+C:\Repos\rvtRebars\obj\Debug\net48\rvtRebars.AssemblyInfo.cs
+C:\Repos\rvtRebars\obj\Debug\net48\rvtRebars.csproj.CoreCompileInputs.cache

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Application">
+    <Name>Application rvtRebars</Name>
+    <Assembly>rvtRebars.dll</Assembly>
+    <FullClassName>rvtRebars.App</FullClassName>
+    <ClientId>2342c35b-3627-4331-afd2-4f4144d4b1bf</ClientId>
+    <VendorId>com.typepad.thebuildingcoder</VendorId>
+    <VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
+  </AddIn>
+</RevitAddIns>

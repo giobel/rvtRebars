@@ -1,0 +1,6 @@
+C:\Repos\rvtRebars\obj\Debug\rvtRebars.csproj.AssemblyReference.cache
+C:\Repos\rvtRebars\obj\Debug\rvtRebars.csproj.CoreCompileInputs.cache
+C:\Repos\rvtRebars\bin\Debug\rvtRebars.dll
+C:\Repos\rvtRebars\bin\Debug\rvtRebars.pdb
+C:\Repos\rvtRebars\obj\Debug\rvtRebars.dll
+C:\Repos\rvtRebars\obj\Debug\rvtRebars.pdb
