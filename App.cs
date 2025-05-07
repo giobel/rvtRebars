@@ -23,6 +23,27 @@ namespace rvtRebars
             {
                     a.CreateRibbonTab(tabName);
 
+                    #region COG
+
+                     RibbonPanel cogs = GetSetRibbonPanel(a, tabName, "COG");
+
+                    if (AddPushButton(cogs, "btnReoWeight", "Reo Weight", null, "rvtRebars.Resources.scale.png", 
+                    "rvtRebars.ReoWeight", "Refer to documentation") == false)
+                    {
+                        MessageBox.Show("Failed to add rebars cog", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+
+
+                    if (AddPushButton(cogs, "btnCogRebars", "Rebars COG", null, "rvtRebars.Resources.cogRebars.png", 
+                    "rvtRebars.GetRebarsCOG", "Refer to documentation") == false)
+                    {
+                        MessageBox.Show("Failed to add rebars cog", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+
+
+
+                    #endregion
+
 
                     #region GROUPS
 
@@ -40,7 +61,7 @@ namespace rvtRebars
                         MessageBox.Show("Failed to add Regroup Bars", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
 
-                    if (AddPushButton(groupsTab, "btnCombineGroups", "Combine Groups", null, "rvtRebars.Resources.exportExcel.png", 
+                    if (AddPushButton(groupsTab, "btnCombineGroups", "Combine Groups", null, "rvtRebars.Resources.clean.png", 
                     "rvtRebars.CombineGroups", "Refer to documentation") == false)
                     {
                         MessageBox.Show("Failed to add Combine Groups", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

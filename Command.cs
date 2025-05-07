@@ -1,9 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using Autodesk.Revit.ApplicationServices;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
@@ -20,7 +15,13 @@ namespace rvtRebars
           ElementSet elements)
         {
 
-            TaskDialog.Show("R", "Hello world");
+            UIApplication uiapp = commandData.Application;
+            UIDocument uidoc = uiapp.ActiveUIDocument;
+
+
+            ICollection<ElementId> eids = uidoc.Selection.GetElementIds();
+
+            uidoc.ShowElements(eids);
             
             return Result.Succeeded;
 

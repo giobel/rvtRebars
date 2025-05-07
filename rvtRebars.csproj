@@ -55,12 +55,11 @@
     <Compile Include="CombineGroups.cs" />
     <Compile Include="ExportGroupsSubElements.cs" />
     <Compile Include="RegroupBars.cs" />
+    <Compile Include="GetRebarsCOG.cs" />
+    <Compile Include="ReoWeight.cs" />
+    <Compile Include="ConcreteWithReoCOG.cs" />
 
     
-
-
-
-
   </ItemGroup>
 
 
@@ -73,11 +72,11 @@
     <EmbeddedResource Include="Resources\import.png" />
     <EmbeddedResource Include="Resources\regroup.png" />
     <EmbeddedResource Include="Resources\clean.png" />
-
-
-
+    <EmbeddedResource Include="Resources\cogRebars.png" />
+    <EmbeddedResource Include="Resources\scale.png" />
 
   </ItemGroup>
+
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 
    <PropertyGroup>
