@@ -54,13 +54,13 @@ namespace rvtRebars
 
                     string segIds = e.LookupParameter("FBA_DrawingSegmentIds").AsValueString();
                     
-                    if (segIds != null)
+                    //if (segIds != null)
                         segIds = Regex.Replace(segIds, @"\r\n?|\n", ", ");
                     
                         string csvLine = $"{eid},{vs.LookupParameter("DOC CODE").AsString()}-{vs.SheetNumber},\"{vs.Name}\",\"{segIds}\",{vs.LookupParameter("Current Revision").AsValueString()}";
 
                         sb.AppendLine(csvLine);
-                }                
+                    //}                
                     
 
                 string outputFile = @"C:\Temp\ExportedData.csv";
@@ -75,6 +75,7 @@ namespace rvtRebars
                 process.Start();
 
           
+            }
             }
             catch (Exception ex)
             {

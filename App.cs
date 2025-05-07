@@ -24,6 +24,31 @@ namespace rvtRebars
                     a.CreateRibbonTab(tabName);
 
 
+                    #region GROUPS
+
+                    RibbonPanel groupsTab = GetSetRibbonPanel(a, tabName, "Groups");
+
+                    if (AddPushButton(groupsTab, "btnExportGroups", "Export Groups", null, "rvtRebars.Resources.exportExcel.png", 
+                    "rvtRebars.ExportGroupsSubElements", "Refer to documentation") == false)
+                    {
+                        MessageBox.Show("Failed to add Export Groups", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+
+                    if (AddPushButton(groupsTab, "btnRegroupBars", "Regroup Bars", null, "rvtRebars.Resources.regroup.png", 
+                    "rvtRebars.RegroupBars", "Refer to documentation") == false)
+                    {
+                        MessageBox.Show("Failed to add Regroup Bars", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+
+                    if (AddPushButton(groupsTab, "btnCombineGroups", "Combine Groups", null, "rvtRebars.Resources.exportExcel.png", 
+                    "rvtRebars.CombineGroups", "Refer to documentation") == false)
+                    {
+                        MessageBox.Show("Failed to add Combine Groups", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+
+                    #endregion
+
+
                     #region UTILITIES
 
                     RibbonPanel utilities = GetSetRibbonPanel(a, tabName, "Utilities");

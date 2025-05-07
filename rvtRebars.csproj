@@ -52,6 +52,12 @@
     <Compile Include="ClashDetection.cs" />
     <Compile Include="UpdateFromExcel.cs" />
     <Compile Include="ExportSheets.cs" />
+    <Compile Include="CombineGroups.cs" />
+    <Compile Include="ExportGroupsSubElements.cs" />
+    <Compile Include="RegroupBars.cs" />
+
+    
+
 
 
 
@@ -65,6 +71,9 @@
     <EmbeddedResource Include="Resources\clash.png" />
     <EmbeddedResource Include="Resources\exportExcel.png" />
     <EmbeddedResource Include="Resources\import.png" />
+    <EmbeddedResource Include="Resources\regroup.png" />
+    <EmbeddedResource Include="Resources\clean.png" />
+
 
 
 
