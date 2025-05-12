@@ -17,14 +17,14 @@
           "C:\\Users\\gbrogiolo\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
-          "net48"
+          "net481"
         ],
         "sources": {
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net40": {
-            "targetAlias": "net48",
+          "net481": {
+            "targetAlias": "net481",
             "projectReferences": {}
           }
         },
@@ -40,17 +40,9 @@
         }
       },
       "frameworks": {
-        "net40": {
-          "targetAlias": "net48",
-          "dependencies": {
-            "Microsoft.NETFramework.ReferenceAssemblies": {
-              "suppressParent": "All",
-              "target": "Package",
-              "version": "[1.0.3, )",
-              "autoReferenced": true
-            }
-          },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.404\\RuntimeIdentifierGraph.json"
+        "net481": {
+          "targetAlias": "net481",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.408\\RuntimeIdentifierGraph.json"
         }
       }
     }

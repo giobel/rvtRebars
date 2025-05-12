@@ -1,36 +1,36 @@
-﻿<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<!-- <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003"> -->
 
-  <PropertyGroup>
-  <OutputType>library</OutputType>
-    <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
-    <RuntimeIdentifiers>win-x64;win7-x64</RuntimeIdentifiers>
-    <RootNamespace>rvtRebars</RootNamespace>
-    <AssemblyName>rvtRebars</AssemblyName>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <UseWPF>true</UseWPF>
+  <Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+  
+    <PropertyGroup>
+      <OutputType>Library</OutputType>
+      <TargetFramework>net481</TargetFramework>
+      <RootNamespace>rvtRebars</RootNamespace>
+      <AssemblyName>rvtRebars</AssemblyName>
+      <UseWPF>true</UseWPF>
   </PropertyGroup>
-
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>x64</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>0</WarningLevel>
-  </PropertyGroup>
-
-
 
 <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
 
 
     <Reference Include="RevitAPI">
@@ -42,26 +42,8 @@
       <Private>False</Private>
     </Reference>
     
+
   </ItemGroup>
-
-
-  <ItemGroup>
-    <Compile Include="App.cs" />
-    <Compile Include="Command.cs" />
-    <Compile Include="SelectFromRevizto.cs" />
-    <Compile Include="ClashDetection.cs" />
-    <Compile Include="UpdateFromExcel.cs" />
-    <Compile Include="ExportSheets.cs" />
-    <Compile Include="CombineGroups.cs" />
-    <Compile Include="ExportGroupsSubElements.cs" />
-    <Compile Include="RegroupBars.cs" />
-    <Compile Include="GetRebarsCOG.cs" />
-    <Compile Include="ReoWeight.cs" />
-    <Compile Include="ConcreteWithReoCOG.cs" />
-
-    
-  </ItemGroup>
-
 
 
   <ItemGroup>
@@ -74,16 +56,16 @@
     <EmbeddedResource Include="Resources\clean.png" />
     <EmbeddedResource Include="Resources\cogRebars.png" />
     <EmbeddedResource Include="Resources\scale.png" />
+    <EmbeddedResource Include="Resources\SelectArea.png" />
+
 
   </ItemGroup>
 
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-
-   <PropertyGroup>
-    <PostBuildEvent>if exist "$(AppData)\Autodesk\REVIT\Addins\2024" copy "$(ProjectDir)*.addin" "$(AppData)\Autodesk\REVIT\Addins\2024"
-if exist "$(AppData)\Autodesk\REVIT\Addins\2024" copy "$(ProjectDir)$(OutputPath)*.dll" "$(AppData)\Autodesk\REVIT\Addins\2024"
-if exist "$(AppData)\Autodesk\REVIT\Addins\2024" copy "$(ProjectDir)$(OutputPath)*.pdb" "$(AppData)\Autodesk\REVIT\Addins\2024"
-</PostBuildEvent>
-  </PropertyGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Copy
+      SourceFiles="$(TargetPath)"
+      DestinationFolder="$(AppData)\Autodesk\Revit\Addins\2024" />
+  </Target>
+  
 
 </Project>

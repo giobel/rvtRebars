@@ -27,6 +27,24 @@ namespace rvtRebars
 
                      RibbonPanel cogs = GetSetRibbonPanel(a, tabName, "COG");
 
+                    string assemblyPath = Assembly.GetExecutingAssembly().Location;
+
+                    PushButtonData buttonData = new PushButtonData(
+                        "ShowWindow",
+                        "Open Window",
+                        assemblyPath,
+                        "MyRevitAddin.MyAddin"
+                    );
+
+                    PushButton button = cogs.AddItem(buttonData) as PushButton;
+
+                    string iconPath = Path.Combine(Path.GetDirectoryName(assemblyPath), "./Resources/clash.png");
+                    if (File.Exists(iconPath))
+                    {
+                        button.LargeImage = new BitmapImage(new Uri(iconPath));
+                    }
+                    
+
                     if (AddPushButton(cogs, "btnReoWeight", "Reo Weight", null, "rvtRebars.Resources.scale.png", 
                     "rvtRebars.ReoWeight", "Refer to documentation") == false)
                     {
@@ -73,12 +91,18 @@ namespace rvtRebars
                     #region UTILITIES
 
                     RibbonPanel utilities = GetSetRibbonPanel(a, tabName, "Utilities");
-
-                    if (AddPushButton(utilities, "btnZoom", "Zoom\nSelected", null, "rvtRebars.Resources.info.png", 
-                    "rvtRebars.Command", "Refer to documentation") == false)
+                    
+                    if (AddPushButton(utilities, "btnSelectBars", "Select Rebars", null, "rvtRebars.Resources.selectArea.png", 
+                    "rvtRebars.SelectRebars", "Select rebars only (works inside groups too)") == false)
                     {
                         MessageBox.Show("Failed to add button zoom", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
+
+                    if (AddPushButton(utilities, "btnZoom", "Zoom\nSelected", null, "rvtRebars.Resources.info.png",
+            "rvtRebars.Command", "Refer to documentation") == false)
+                {
+                    MessageBox.Show("Failed to add button zoom", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
 
                    if (AddPushButton(utilities, "btnSelect", "Select From\nClipboard", null, "rvtRebars.Resources.select.png", 
                     "rvtRebars.SelectFromRevizto", "Refer to documentation") == false)

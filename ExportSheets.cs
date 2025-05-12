@@ -26,12 +26,10 @@ namespace rvtRebars
             UIDocument uidoc = uiapp.ActiveUIDocument;
             Application app = uiapp.Application;
             Document doc = uidoc.Document;
-
-            string inputFile = @"C:\Temp\ExportedData.csv";
             
-            int counter = 0;
-
             try {
+
+                string outputFile = @"C:\Temp\ExportedData.csv";
 
                 StringBuilder sb = new StringBuilder();
 
@@ -63,7 +61,7 @@ namespace rvtRebars
                     //}                
                     
 
-                string outputFile = @"C:\Temp\ExportedData.csv";
+                
 
                 File.WriteAllText(outputFile, headers + "\n");
 

@@ -63,7 +63,7 @@ namespace rvtRebars
 					
 					totalW += rebarWeight;
 					
-				element.LookupParameter("Weight (SRC_FBA)").Set(rebarWeight);
+				//element.LookupParameter("Weight (SRC_FBA)").Set(rebarWeight);
 			}
 				
 				t.Commit();

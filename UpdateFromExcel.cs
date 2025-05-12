@@ -95,7 +95,7 @@ namespace rvtRebars
                                         
                                     
                                 }
-                                catch(Exception ex)
+                                catch
                                 {
                                     //TaskDialog.Show("Error", ex.Message); 
                                 }
