@@ -28,31 +28,15 @@ namespace rvtRebars
                      RibbonPanel cogs = GetSetRibbonPanel(a, tabName, "COG");
 
                     string assemblyPath = Assembly.GetExecutingAssembly().Location;
-
-                    PushButtonData buttonData = new PushButtonData(
-                        "ShowWindow",
-                        "Open Window",
-                        assemblyPath,
-                        "MyRevitAddin.MyAddin"
-                    );
-
-                    PushButton button = cogs.AddItem(buttonData) as PushButton;
-
-                    string iconPath = Path.Combine(Path.GetDirectoryName(assemblyPath), "./Resources/clash.png");
-                    if (File.Exists(iconPath))
-                    {
-                        button.LargeImage = new BitmapImage(new Uri(iconPath));
-                    }
                     
-
-                    if (AddPushButton(cogs, "btnReoWeight", "Reo Weight", null, "rvtRebars.Resources.scale.png", 
+                    if (AddPushButton(cogs, assemblyPath, "btnReoWeight", "Reo Weight", null, "rvtRebars.Resources.scale.png", 
                     "rvtRebars.ReoWeight", "Refer to documentation") == false)
                     {
                         MessageBox.Show("Failed to add rebars cog", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
 
 
-                    if (AddPushButton(cogs, "btnCogRebars", "Rebars COG", null, "rvtRebars.Resources.cogRebars.png", 
+                    if (AddPushButton(cogs, assemblyPath, "btnCogRebars", "Rebars COG", null, "rvtRebars.Resources.cogRebars.png", 
                     "rvtRebars.GetRebarsCOG", "Refer to documentation") == false)
                     {
                         MessageBox.Show("Failed to add rebars cog", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -67,19 +51,19 @@ namespace rvtRebars
 
                     RibbonPanel groupsTab = GetSetRibbonPanel(a, tabName, "Groups");
 
-                    if (AddPushButton(groupsTab, "btnExportGroups", "Export Groups", null, "rvtRebars.Resources.exportExcel.png", 
+                    if (AddPushButton(groupsTab, assemblyPath, "btnExportGroups", "Export Groups", null, "rvtRebars.Resources.exportExcel.png", 
                     "rvtRebars.ExportGroupsSubElements", "Refer to documentation") == false)
                     {
                         MessageBox.Show("Failed to add Export Groups", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
 
-                    if (AddPushButton(groupsTab, "btnRegroupBars", "Regroup Bars", null, "rvtRebars.Resources.regroup.png", 
+                    if (AddPushButton(groupsTab, assemblyPath, "btnRegroupBars", "Regroup Bars", null, "rvtRebars.Resources.regroup.png", 
                     "rvtRebars.RegroupBars", "Refer to documentation") == false)
                     {
                         MessageBox.Show("Failed to add Regroup Bars", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
 
-                    if (AddPushButton(groupsTab, "btnCombineGroups", "Combine Groups", null, "rvtRebars.Resources.clean.png", 
+                    if (AddPushButton(groupsTab, assemblyPath, "btnCombineGroups", "Combine Groups", null, "rvtRebars.Resources.clean.png", 
                     "rvtRebars.CombineGroups", "Refer to documentation") == false)
                     {
                         MessageBox.Show("Failed to add Combine Groups", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -92,37 +76,37 @@ namespace rvtRebars
 
                     RibbonPanel utilities = GetSetRibbonPanel(a, tabName, "Utilities");
                     
-                    if (AddPushButton(utilities, "btnSelectBars", "Select Rebars", null, "rvtRebars.Resources.selectArea.png", 
+                    if (AddPushButton(utilities,assemblyPath, "btnSelectBars", "Select Rebars", null, "rvtRebars.Resources.selectArea.png", 
                     "rvtRebars.SelectRebars", "Select rebars only (works inside groups too)") == false)
                     {
                         MessageBox.Show("Failed to add button zoom", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
 
-                    if (AddPushButton(utilities, "btnZoom", "Zoom\nSelected", null, "rvtRebars.Resources.info.png",
+                    if (AddPushButton(utilities,assemblyPath, "btnZoom", "Zoom\nSelected", null, "rvtRebars.Resources.info.png",
             "rvtRebars.Command", "Refer to documentation") == false)
                 {
                     MessageBox.Show("Failed to add button zoom", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
-                   if (AddPushButton(utilities, "btnSelect", "Select From\nClipboard", null, "rvtRebars.Resources.select.png", 
+                   if (AddPushButton(utilities,assemblyPath, "btnSelect", "Select From\nClipboard", null, "rvtRebars.Resources.select.png", 
                     "rvtRebars.SelectFromRevizto", "Refer to documentation") == false)
                     {
                         MessageBox.Show("Failed to add button select", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
 
-                   if (AddPushButton(utilities, "btnClash", "Clash Check", null, "rvtRebars.Resources.clash.png", 
+                   if (AddPushButton(utilities,assemblyPath, "btnClash", "Clash Check", null, "rvtRebars.Resources.clash.png", 
                     "rvtRebars.ClashDetection", "Refer to documentation") == false)
                     {
                         MessageBox.Show("Failed to add button select", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
 
-                    if (AddPushButton(utilities, "btnExport", "Export Sheets", null, "rvtRebars.Resources.exportExcel.png", 
+                    if (AddPushButton(utilities,assemblyPath, "btnExport", "Export Sheets", null, "rvtRebars.Resources.exportExcel.png", 
                     "rvtRebars.ExportSheets", "Refer to documentation") == false)
                     {
                         MessageBox.Show("Failed to add button export sheets", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     
-                    if (AddPushButton(utilities, "btnImport", "Update SegIds", null, "rvtRebars.Resources.import.png", 
+                    if (AddPushButton(utilities,assemblyPath, "btnImport", "Update SegIds", null, "rvtRebars.Resources.import.png", 
                     "rvtRebars.UpdateFromExcel", "Refer to documentation") == false)
                     {
                         MessageBox.Show("Failed to add button export sheets", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -188,14 +172,12 @@ private BitmapSource GetEmbeddedImage( string name )
             return tab;
         }
 
-        private Boolean AddPushButton(RibbonPanel Panel, string ButtonName, string ButtonText, string ImagePath16, string ImagePath32, string dllClass, string Tooltip)
+        private Boolean AddPushButton(RibbonPanel Panel, string assemblyPath, string ButtonName, string ButtonText, string ImagePath16, string ImagePath32, string dllClass, string Tooltip)
         {
-
-            string thisAssemblyPath = Assembly.GetExecutingAssembly().Location;
 
             try
             {
-                PushButtonData m_pbData = new PushButtonData(ButtonName, ButtonText, thisAssemblyPath, dllClass);
+                PushButtonData m_pbData = new PushButtonData(ButtonName, ButtonText, assemblyPath, dllClass);
 
                 BitmapSource bitmap16 = GetEmbeddedImage( ImagePath16 );
 
