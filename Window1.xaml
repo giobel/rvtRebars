@@ -38,7 +38,7 @@
             </GroupBox>             
 
         <Button Content="Select" Click="BtnSelectClick" Margin="10" Height="30"></Button>
-		
+		 <TextBlock x:Name="OutputText"/>
     </StackPanel>
 
 </Window>

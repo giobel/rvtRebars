@@ -54,7 +54,7 @@ namespace rvtRebars
 					SlicesInSegment.Add(item);
 				}
 
-				
+				OutputText.Text = "Select a Slice";
 
 			}
 			catch (Exception ex)
@@ -70,7 +70,7 @@ namespace rvtRebars
 			try
 			{
 				if (cboxSlices.SelectedItem == null || cboxUniqueIds.SelectedItem == null)
-            		return;
+					return;
 
 				SelectedBars.Clear();
 
@@ -79,14 +79,15 @@ namespace rvtRebars
 					x.LookupParameter("FBA_Slice")?.AsValueString() == cboxSlices.SelectedItem?.ToString())
 					.Select(x => x.Id)
 					.ToList();
+
+
+				OutputText.Text = $"{SelectedBars.Count().ToString()} rebars selected";
 			}
 
 			catch (Exception ex)
 			{
 				MessageBox.Show(ex.Message + "   " + cboxSlices.ToString());
-			 }
-
-
+			}
 		}
 
 
