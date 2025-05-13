@@ -1,11 +1,43 @@
 ﻿<Window x:Class="rvtRebars.Window1"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:local="clr-namespace:rvtRebars"
 	Title="wuf" Height="300" Width="300">
-	<Grid>
-		<TextBlock Text="Hello from Revit Add-in!" 
-		VerticalAlignment="Center" 
-		HorizontalAlignment="Center"
-		FontSize="20"/>
-	</Grid>
+
+
+		<StackPanel Margin="0,10,0,0">
+
+            <GroupBox Header="Segment UniqueID:" BorderThickness="0" Margin="0,0,0,5">
+                
+                    <ComboBox x:Name="cboxUniqueIds"   
+                        ItemsSource="{Binding UniqueIds}"
+                        Margin = "0,5,0,0"
+                        Height="25"   
+                        VerticalAlignment="Top"  
+                        BorderThickness="1"  
+                        VerticalContentAlignment="Center"  
+                        Background="Transparent"  
+                        Foreground="Black"                         
+                        SelectionChanged="cboxUniqueIds_SelectionChanged"
+                        />
+           
+            </GroupBox>
+
+            <GroupBox Header="Slice:" BorderThickness="0" Margin="0,0,0,5">
+                    <ComboBox x:Name="cboxSlices"   
+                        ItemsSource="{Binding SlicesInSegment}"
+                        Margin = "0,5,0,0"
+                        Height="25"   
+                        VerticalAlignment="Top"  
+                        BorderThickness="1"  
+                        VerticalContentAlignment="Center"  
+                        Background="Transparent"  
+                        Foreground="Black"                         
+						SelectionChanged="cboxSlices_SelectionChanged" 
+					/>
+            </GroupBox>             
+
+
+		</StackPanel>
+
 </Window>

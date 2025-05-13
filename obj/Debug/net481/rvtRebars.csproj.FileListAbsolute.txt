@@ -14,3 +14,4 @@ C:\Repos\rvtRebars\bin\Debug\net481\rvtRebars.dll
 C:\Repos\rvtRebars\bin\Debug\net481\rvtRebars.pdb
 C:\Repos\rvtRebars\obj\Debug\net481\rvtRebars.dll
 C:\Repos\rvtRebars\obj\Debug\net481\rvtRebars.pdb
+C:\Repos\rvtRebars\obj\Debug\net481\rvtRebars_MarkupCompile.lref

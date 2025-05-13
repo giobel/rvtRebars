@@ -26,14 +26,22 @@ namespace rvtRebars
             UIDocument uidoc = uiapp.ActiveUIDocument;
             Application app = uiapp.Application;
             Document doc = uidoc.Document;		
+			
+      //these are bars in view, what happens when the view changes? need to update this
+		    IList<Element> rebars = new FilteredElementCollector(doc, doc.ActiveView.Id).OfCategory(BuiltInCategory.OST_Rebar).WhereElementIsNotElementType().ToElements();
+	
+            var uniqueIds = rebars
+            .Select(x => x.LookupParameter("LOR_UniqueID (SRC_FBA)")?.AsValueString())
+            .Where(id => !string.IsNullOrEmpty(id))
+            .Distinct()
+            .ToList();
 
+      uniqueIds.Sort();
+      // rebars.GroupBy(x=> x.LookupParameter("LOR_UniqueID (SRC_FBA)").AsValueString());
 
-			
-			// IList<Element> rebars = new FilteredElementCollector(doc, doc.ActiveView.Id).OfCategory(BuiltInCategory.OST_Rebar).WhereElementIsNotElementType().ToElements();
-			
-			// rebars.GroupBy(x=> x.LookupParameter("LOR_UniqueID (SRC_FBA)").AsValueString());
-			
-            var form = new Window1();
+      var form = new Window1(uidoc, doc, rebars);
+
+            form.UniqueIds = new List<string>(uniqueIds);                    
 
             form.Show();
 
