@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
@@ -15,7 +16,7 @@ namespace rvtRebars
 		public List<string> UniqueIds { get; set; }
 		private IList<Element> VisibleRebars { get; set; }
 		public ObservableCollection<string> SlicesInSegment { get; set; }
-		public List<Element> SelectedBars { get; set; }
+		public List<ElementId> SelectedBars { get; set; }
 		Document _doc { get; set; }
 		UIDocument _uidoc { get; set; }
 
@@ -24,6 +25,7 @@ namespace rvtRebars
 			InitializeComponent();
 			this.DataContext = this;
 			VisibleRebars = bars;
+			SelectedBars = new List<ElementId>();
 			SlicesInSegment = new ObservableCollection<string>();
 			_uidoc = uidoc;
 			_doc = doc;
@@ -32,37 +34,69 @@ namespace rvtRebars
 
 		private void cboxUniqueIds_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
 		{
-			SlicesInSegment.Clear();
-			//MessageBox.Show(cboxUniqueIds.SelectedItem.ToString());
-
-			var currentSegment = VisibleRebars
-				.Where(x => x.LookupParameter("LOR_UniqueID (SRC_FBA)")?.AsValueString() == cboxUniqueIds.SelectedItem.ToString())
-				.Select(x => x.LookupParameter("FBA_Slice")?.AsValueString())
-				.Where(slice => !string.IsNullOrEmpty(slice))
-				.Distinct()
-				.ToList();
-
-			currentSegment.Sort();
-
-			foreach (var item in currentSegment)
+			try
 			{
-				SlicesInSegment.Add(item);
-			}
 
+				SlicesInSegment.Clear();
+				//MessageBox.Show(cboxUniqueIds.SelectedItem.ToString());
+
+				var currentSegment = VisibleRebars
+					.Where(x => x.LookupParameter("LOR_UniqueID (SRC_FBA)")?.AsValueString() == cboxUniqueIds.SelectedItem.ToString())
+					.Select(x => x.LookupParameter("FBA_Slice")?.AsValueString())
+					.Where(slice => !string.IsNullOrEmpty(slice))
+					.Distinct()
+					.ToList();
+
+				currentSegment.Sort();
+
+				foreach (var item in currentSegment)
+				{
+					SlicesInSegment.Add(item);
+				}
+
+				
+
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message);
+			}
 
 
 		}
 
 		private void cboxSlices_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
 		{
-			var currentSlices = VisibleRebars
-				.Where(x => x.LookupParameter("LOR_UniqueID (SRC_FBA)")?.AsValueString() == cboxUniqueIds.SelectedItem.ToString() &&
-				x.LookupParameter("FBA_Slice").AsValueString() == cboxSlices.SelectedItem.ToString())
-				.Select(x => x.Id)
-				.ToList();
-			
-			_uidoc.Selection.SetElementIds(currentSlices);
+			try
+			{
+				if (cboxSlices.SelectedItem == null || cboxUniqueIds.SelectedItem == null)
+            		return;
 
-        }
+				SelectedBars.Clear();
+
+				SelectedBars = VisibleRebars
+					.Where(x => x.LookupParameter("LOR_UniqueID (SRC_FBA)")?.AsValueString() == cboxUniqueIds.SelectedItem?.ToString() &&
+					x.LookupParameter("FBA_Slice")?.AsValueString() == cboxSlices.SelectedItem?.ToString())
+					.Select(x => x.Id)
+					.ToList();
+			}
+
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message + "   " + cboxSlices.ToString());
+			 }
+
+
+		}
+
+
+		private void BtnSelectClick(object sender, RoutedEventArgs e)
+		{
+			if (SelectedBars != null)
+			{
+				_uidoc.Selection.SetElementIds(SelectedBars);
+				_uidoc.ShowElements(SelectedBars);				
+			}
+		}
 	}
 }

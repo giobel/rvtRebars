@@ -37,7 +37,8 @@
 					/>
             </GroupBox>             
 
-
-		</StackPanel>
+        <Button Content="Select" Click="BtnSelectClick" Margin="10" Height="30"></Button>
+		
+    </StackPanel>
 
 </Window>
