@@ -114,7 +114,7 @@ namespace rvtRebars
 
 		private void comboCategories_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
 		{
-			MakeRequest(RequestId.MakeLeft);
+			MakeRequest(RequestId.Update);
 		}
 		/*
 				private void cboxUniqueIds_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)

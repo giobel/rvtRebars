@@ -89,6 +89,15 @@ namespace rvtRebars
                             FindUids(uiapp);
                             break;
                         }
+                        case RequestId.Update:
+                        {
+                            // This is a request to update the list of doors
+                            // The selection is done in the modeless form
+                            // and the result is passed to the event handler
+                            // via the request object
+                            UpdateSomething(uiapp);
+                            break;
+                        }
                     case RequestId.Delete:
                         {
                             ModifySelectedDoors(uiapp, "Delete doors", e => e.Document.Delete(e.Id));
@@ -145,22 +154,28 @@ namespace rvtRebars
             return;
         }
 
+        private void UpdateSomething(UIApplication uiapp)
+        {
+            TaskDialog.Show("Revit", "UpdateSomething");
+        }
+
+
         private void FindUids(UIApplication uiapp)
         {
             //TaskDialog.Show("Revit", "FindUids");
-                    Document doc = uiapp.ActiveUIDocument.Document;
-                    List<string> categoryNames = new List<string>();
+            Document doc = uiapp.ActiveUIDocument.Document;
+            List<string> categoryNames = new List<string>();
 
-                    foreach (Category cat in doc.Settings.Categories)
-                    {
-                        if (cat.AllowsBoundParameters)
-                            categoryNames.Add(cat.Name);
-                    }
+            foreach (Category cat in doc.Settings.Categories)
+            {
+                if (cat.AllowsBoundParameters)
+                    categoryNames.Add(cat.Name);
+            }
 
-                    Window?.Dispatcher.Invoke(() =>
-                    {
-                        Window.comboCategories.ItemsSource = categoryNames.OrderBy(n => n).ToList();
-                    });
+            Window?.Dispatcher.Invoke(() =>
+            {
+                Window.comboCategories.ItemsSource = categoryNames.OrderBy(n => n).ToList();
+            });
         }
 
         /// <summary>

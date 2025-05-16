@@ -66,7 +66,8 @@ namespace rvtRebars
        /// "Rotate" request
        /// </summary>
        Rotate = 8,
-        Populate = 9
+        Populate = 9,
+        Update = 10
     }
 
    /// <summary>
