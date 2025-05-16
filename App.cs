@@ -280,6 +280,8 @@ namespace rvtRebars
                     // The dialog becomes the owner responsible fore disposing them, eventually.
                     //m_MyForm = new ModelessForm(exEvent, handler);
                     m_MyForm = new Window1(exEvent, handler);
+
+                    handler.Window = m_MyForm;
                     m_MyForm.Show();
                 }
         }

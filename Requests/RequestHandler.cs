@@ -21,6 +21,7 @@
 //
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using Autodesk.Revit.DB;
@@ -146,6 +147,7 @@ namespace rvtRebars
 
         private void FindUids(UIApplication uiapp)
         {
+            //TaskDialog.Show("Revit", "FindUids");
                     Document doc = uiapp.ActiveUIDocument.Document;
                     List<string> categoryNames = new List<string>();
 

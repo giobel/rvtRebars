@@ -25,8 +25,8 @@ namespace rvtRebars
 			InitializeComponent();
 			m_Handler = handler;
 			m_ExEvent = exEvent;
-			
-			MakeRequest(RequestId.MakeLeft);
+
+			MakeRequest(RequestId.Populate);
 			// this.DataContext = this;
 			// VisibleRebars = bars;
 			// SelectedBars = new List<ElementId>();
@@ -104,14 +104,18 @@ namespace rvtRebars
 		///
 		private void EnableCommands(bool status)
 		{
-				foreach (UIElement element in LogicalTreeHelper.GetChildren(this).OfType<UIElement>())
-				{
-					element.IsEnabled = status;
-				}
+			foreach (UIElement element in LogicalTreeHelper.GetChildren(this).OfType<UIElement>())
+			{
+				element.IsEnabled = status;
+			}
 
 		}
-		
 
+
+		private void comboCategories_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+		{
+			MakeRequest(RequestId.MakeLeft);
+		}
 		/*
 				private void cboxUniqueIds_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
 				{

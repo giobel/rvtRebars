@@ -10,8 +10,10 @@
 
 		<StackPanel Margin="0,10,0,0">
 
-                <ComboBox ItemsSource="{Binding Fields}" Name="myItems"/>
-
+            <ComboBox x:Name="comboCategories" Width="200" Margin="10"
+            
+            SelectionChanged="comboCategories_SelectionChanged"
+            />
 
             <GroupBox Header="Segment UniqueID:" BorderThickness="0" Margin="0,0,0,5">
                 
