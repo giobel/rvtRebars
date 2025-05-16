@@ -7,17 +7,32 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Windows.Forms;
+using MessageBox = System.Windows.Forms.MessageBox;
+using MessageBoxButtons = System.Windows.Forms.MessageBoxButtons;
+using MessageBoxIcon = System.Windows.Forms.MessageBoxIcon;
 using System.Windows.Media.Imaging;
 #endregion
 
 namespace rvtRebars
 {
-  class App : IExternalApplication
+  public class App : IExternalApplication
   {
+
+    // class instance
+    internal static App thisApp = null;
+
+        // ModelessForm instance
+        //private ModelessForm m_MyForm;
+        private Window1 m_MyForm;
+
     public Result OnStartup( UIControlledApplication a )
     {
-                    string tabName = "LOR Rebars";
+            m_MyForm = null;   // no dialog needed yet; the command will bring it
+            thisApp = this;  // static access to this application instance
+            
+            //MessageBox.Show($"this app registered {thisApp.ToString()}");
+
+            string tabName = "LOR Rebars";
 
             try
             {
@@ -25,15 +40,28 @@ namespace rvtRebars
 
                     #region COG
 
-                     RibbonPanel cogs = GetSetRibbonPanel(a, tabName, "COG");
+                    RibbonPanel cogs = GetSetRibbonPanel(a, tabName, "COG");
 
                     string assemblyPath = Assembly.GetExecutingAssembly().Location;
                     
-                    if (AddPushButton(cogs, assemblyPath, "btnReoWeight", "Reo Weight", null, "rvtRebars.Resources.scale.png", 
-                    "rvtRebars.ReoWeight", "Refer to documentation") == false)
-                    {
-                        MessageBox.Show("Failed to add rebars cog", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    if (AddPushButton(cogs, assemblyPath, "btnSliceLayers", "Modeless", null, "rvtRebars.Resources.scale.png",
+                        "rvtRebars.InvertSliceLayers", "Refer to documentation") == false)
+                {
+                    MessageBox.Show("Failed to add rebars cog", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                
+                if (AddPushButton(cogs, assemblyPath, "btnModeless", "Modeless", null, "rvtRebars.Resources.scale.png",
+                        "rvtRebars.ModelessWindow", "Refer to documentation") == false)
+                {
+                    MessageBox.Show("Failed to add rebars cog", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                
+                    
+                    if (AddPushButton(cogs, assemblyPath, "btnReoWeight", "Reo Weight", null, "rvtRebars.Resources.scale.png",
+"rvtRebars.ReoWeight", "Refer to documentation") == false)
+                {
+                    MessageBox.Show("Failed to add rebars cog", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
 
 
                     if (AddPushButton(cogs, assemblyPath, "btnCogRebars", "Rebars COG", null, "rvtRebars.Resources.cogRebars.png", 
@@ -83,7 +111,7 @@ namespace rvtRebars
                     }
 
                     if (AddPushButton(utilities,assemblyPath, "btnZoom", "Zoom\nSelected", null, "rvtRebars.Resources.info.png",
-            "rvtRebars.Command", "Refer to documentation") == false)
+            "rvtRebars.ZoomSelection", "Refer to documentation") == false)
                 {
                     MessageBox.Show("Failed to add button zoom", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
@@ -131,10 +159,16 @@ namespace rvtRebars
 
     public Result OnShutdown( UIControlledApplication a )
     {
+            //if (m_MyForm != null && m_MyForm.Visible)
+            if (m_MyForm != null)
+            {
+                m_MyForm.Close();
+            }
+
       return Result.Succeeded;
     }
     
-private BitmapSource GetEmbeddedImage( string name )
+    private BitmapSource GetEmbeddedImage( string name )
 {
   try
   {
@@ -150,7 +184,7 @@ private BitmapSource GetEmbeddedImage( string name )
 
 
 
-        private RibbonPanel GetSetRibbonPanel(UIControlledApplication application, string tabName, string panelName)
+    private RibbonPanel GetSetRibbonPanel(UIControlledApplication application, string tabName, string panelName)
         {
             List<RibbonPanel> tabList = new List<RibbonPanel>();
 
@@ -172,7 +206,7 @@ private BitmapSource GetEmbeddedImage( string name )
             return tab;
         }
 
-        private Boolean AddPushButton(RibbonPanel Panel, string assemblyPath, string ButtonName, string ButtonText, string ImagePath16, string ImagePath32, string dllClass, string Tooltip)
+    private Boolean AddPushButton(RibbonPanel Panel, string assemblyPath, string ButtonName, string ButtonText, string ImagePath16, string ImagePath32, string dllClass, string Tooltip)
         {
 
             try
@@ -199,7 +233,7 @@ private BitmapSource GetEmbeddedImage( string name )
             }
         }
 
-        public BitmapImage Convert(System.Drawing.Bitmap src)
+    public BitmapImage Convert(System.Drawing.Bitmap src)
         {
             MemoryStream ms = new MemoryStream();
             ((System.Drawing.Bitmap)src).Save(ms, System.Drawing.Imaging.ImageFormat.Png);
@@ -211,7 +245,43 @@ private BitmapSource GetEmbeddedImage( string name )
             return image;
         }
 
+    /// <summary>
+    ///   Waking up the dialog from its waiting state.
+    /// </summary>
+    /// 
+    public void WakeFormUp()
+    {
+        if (m_MyForm != null)
+        {
+            m_MyForm.WakeUp();
+        }
+    }
 
+        /// <summary>
+        ///   This method creates and shows a modeless dialog, unless it already exists.
+        /// </summary>
+        /// <remarks>
+        ///   The external command invokes this on the end-user's request
+        /// </remarks>
+        /// 
+        public void ShowForm(UIApplication uiapp)
+        {
+            // If we do not have a dialog yet, create and show it
+            //if (m_MyForm == null || m_MyForm.IsDisposed)           
+            if (m_MyForm == null || !m_MyForm.IsVisible)
+                {
+                    // A new handler to handle request posting by the dialog
+                    RequestHandler handler = new RequestHandler();
 
+                    // External Event for the dialog to use (to post requests)
+                    ExternalEvent exEvent = ExternalEvent.Create(handler);
+
+                    // We give the objects to the new dialog;
+                    // The dialog becomes the owner responsible fore disposing them, eventually.
+                    //m_MyForm = new ModelessForm(exEvent, handler);
+                    m_MyForm = new Window1(exEvent, handler);
+                    m_MyForm.Show();
+                }
+        }
   }
 }

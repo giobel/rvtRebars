@@ -1,6 +1,4 @@
 C:\Repos\rvtRebars\obj\Debug\net481\rvtRebars.csproj.AssemblyReference.cache
-C:\Repos\rvtRebars\obj\Debug\net481\Window1.baml
-C:\Repos\rvtRebars\obj\Debug\net481\Window1.g.cs
 C:\Repos\rvtRebars\obj\Debug\net481\rvtRebars_MarkupCompile.cache
 C:\Repos\rvtRebars\obj\Debug\net481\rvtRebars.g.resources
 C:\Repos\rvtRebars\obj\Debug\net481\rvtRebars.Form1.resources
@@ -15,3 +13,6 @@ C:\Repos\rvtRebars\bin\Debug\net481\rvtRebars.pdb
 C:\Repos\rvtRebars\obj\Debug\net481\rvtRebars.dll
 C:\Repos\rvtRebars\obj\Debug\net481\rvtRebars.pdb
 C:\Repos\rvtRebars\obj\Debug\net481\rvtRebars_MarkupCompile.lref
+C:\Repos\rvtRebars\obj\Debug\net481\Forms\Window1.g.cs
+C:\Repos\rvtRebars\obj\Debug\net481\Forms\Window1.baml
+C:\Repos\rvtRebars\obj\Debug\net481\rvtRebars.Forms.ModelessForm.resources
