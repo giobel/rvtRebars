@@ -57,8 +57,7 @@
     <EmbeddedResource Include="Resources\cogRebars.png" />
     <EmbeddedResource Include="Resources\scale.png" />
     <EmbeddedResource Include="Resources\SelectArea.png" />
-
-
+    <EmbeddedResource Include="Resources\invert.png" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

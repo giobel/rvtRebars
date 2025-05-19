@@ -44,17 +44,12 @@ namespace rvtRebars
 
                     string assemblyPath = Assembly.GetExecutingAssembly().Location;
                     
-                    if (AddPushButton(cogs, assemblyPath, "btnSliceLayers", "Modeless", null, "rvtRebars.Resources.scale.png",
+                    if (AddPushButton(cogs, assemblyPath, "btnSliceLayers", "Invert Slices", null, "rvtRebars.Resources.invert.png",
                         "rvtRebars.InvertSliceLayers", "Refer to documentation") == false)
                 {
                     MessageBox.Show("Failed to add rebars cog", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-                
-                if (AddPushButton(cogs, assemblyPath, "btnModeless", "Modeless", null, "rvtRebars.Resources.scale.png",
-                        "rvtRebars.ModelessWindow", "Refer to documentation") == false)
-                {
-                    MessageBox.Show("Failed to add rebars cog", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+
                 
                     
                     if (AddPushButton(cogs, assemblyPath, "btnReoWeight", "Reo Weight", null, "rvtRebars.Resources.scale.png",

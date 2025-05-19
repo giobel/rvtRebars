@@ -15,4 +15,3 @@ C:\Repos\rvtRebars\obj\Debug\net481\rvtRebars.pdb
 C:\Repos\rvtRebars\obj\Debug\net481\rvtRebars_MarkupCompile.lref
 C:\Repos\rvtRebars\obj\Debug\net481\Forms\Window1.g.cs
 C:\Repos\rvtRebars\obj\Debug\net481\Forms\Window1.baml
-C:\Repos\rvtRebars\obj\Debug\net481\rvtRebars.Forms.ModelessForm.resources

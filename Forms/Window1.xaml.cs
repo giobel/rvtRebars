@@ -26,7 +26,8 @@ namespace rvtRebars
 			m_Handler = handler;
 			m_ExEvent = exEvent;
 
-			MakeRequest(RequestId.Populate);
+			MakeRequest(RequestId.LoadRebars);
+
 			// this.DataContext = this;
 			// VisibleRebars = bars;
 			// SelectedBars = new List<ElementId>();
@@ -93,9 +94,24 @@ namespace rvtRebars
 		/// 
 		private void BtnSelectClick(object sender, EventArgs e)
 		{
-			MakeRequest(RequestId.MakeLeft);
+			MakeRequest(RequestId.Select);
 		}
 
+		private void BtnInvertLayers(object sender, EventArgs e)
+		{
+			MakeRequest(RequestId.InvertLayers);
+		}
+
+		private void BtnColorBySlice(object sender, EventArgs e)
+		{
+			MakeRequest(RequestId.ColorBySlice);
+		}
+
+
+		private void BtnZoomTo(object sender, EventArgs e)
+		{
+		MakeRequest(RequestId.ColorBySlice);
+	}
 
 
 		/// <summary>
@@ -108,14 +124,21 @@ namespace rvtRebars
 			{
 				element.IsEnabled = status;
 			}
-
 		}
 
 
-		private void comboCategories_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+		private void comboUniqueIds_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
 		{
-			MakeRequest(RequestId.Update);
+			MakeRequest(RequestId.UpdateSlices);
 		}
+
+
+		private void cboxSlices_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+		{
+			//TaskDialog.Show("R", "Not implemented yet");
+		}
+
+
 		/*
 				private void cboxUniqueIds_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
 				{

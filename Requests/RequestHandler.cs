@@ -22,10 +22,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using System.Windows;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using System.Security.Cryptography;
+using System.Text;
+
 
 namespace rvtRebars
 {
@@ -42,6 +46,8 @@ namespace rvtRebars
 
         // The value of the latest request made by the modeless form 
         private Request m_request = new Request();
+
+        private IList<Element> VisibleRebars;
 
         /// <summary>
         /// A public property to access the current request value
@@ -80,64 +86,37 @@ namespace rvtRebars
                         {
                             return;  // no request at this time -> we can leave immediately
                         }
-                    case RequestId.Populate:
+                    case RequestId.LoadRebars:
                         {
-                            // This is a request to populate the list of doors
-                            // The selection is done in the modeless form
-                            // and the result is passed to the event handler
-                            // via the request object
-                            FindUids(uiapp);
+                            //Load all rebars in the model
+                            LoadRebars(uiapp);
                             break;
                         }
-                        case RequestId.Update:
+                    case RequestId.UpdateSlices:
                         {
-                            // This is a request to update the list of doors
-                            // The selection is done in the modeless form
-                            // and the result is passed to the event handler
-                            // via the request object
-                            UpdateSomething(uiapp);
+                            UpdateSlicesList(uiapp);
                             break;
                         }
-                    case RequestId.Delete:
+                    case RequestId.Select:
                         {
-                            ModifySelectedDoors(uiapp, "Delete doors", e => e.Document.Delete(e.Id));
+                            SelectSliceBars(uiapp);
                             break;
                         }
-                    case RequestId.FlipLeftRight:
+                    case RequestId.InvertLayers:
                         {
-                            ModifySelectedDoors(uiapp, "Flip door Hand", e => e.flipHand());
+                            InvertLayers(uiapp);
                             break;
                         }
-                    case RequestId.FlipInOut:
+                    case RequestId.ColorBySlice:
                         {
-                            ModifySelectedDoors(uiapp, "Flip door Facing", e => e.flipFacing());
+                            ColorBySlice(uiapp);
                             break;
                         }
-                    case RequestId.MakeLeft:
-                        {
-                            ModifySelectedDoors(uiapp, "Make door Left", MakeLeft);
-                            break;
-                        }
-                    case RequestId.MakeRight:
-                        {
-                            ModifySelectedDoors(uiapp, "Make door Right", MakeRight);
-                            break;
-                        }
-                    case RequestId.TurnOut:
-                        {
-                            ModifySelectedDoors(uiapp, "Place door Out", TurnOut);
-                            break;
-                        }
-                    case RequestId.TurnIn:
-                        {
-                            ModifySelectedDoors(uiapp, "Place door In", TurnIn);
-                            break;
-                        }
-                    case RequestId.Rotate:
-                        {
-                            ModifySelectedDoors(uiapp, "Rotate door", FlipHandAndFace);
-                            break;
-                        }
+                    case RequestId.ZoomTo:
+                    {
+                                ZoomTo(uiapp);
+                        break;
+                }
                     default:
                         {
                             // some kind of a warning here should
@@ -154,125 +133,203 @@ namespace rvtRebars
             return;
         }
 
-        private void UpdateSomething(UIApplication uiapp)
+        private void ZoomTo(UIApplication uiapp)
         {
-            TaskDialog.Show("Revit", "UpdateSomething");
+            string selectedSegment = Window.cboxUniqueIds.SelectedItem.ToString();
+            string selectedSlice = Window.cboxSlices.SelectedItem.ToString();
+
+            var SelectedBars = VisibleRebars
+                .Where(x => x.LookupParameter("LOR_UniqueID (SRC_FBA)")?.AsValueString() == selectedSegment &&
+                x.LookupParameter("FBA_Slice")?.AsValueString() == selectedSlice)
+                .Select(x => x.Id)
+                .ToList();
+
+            uiapp.ActiveUIDocument.ShowElements(SelectedBars);
         }
 
-
-        private void FindUids(UIApplication uiapp)
+        private void ColorBySlice(UIApplication uiapp)
         {
-            //TaskDialog.Show("Revit", "FindUids");
             Document doc = uiapp.ActiveUIDocument.Document;
-            List<string> categoryNames = new List<string>();
 
-            foreach (Category cat in doc.Settings.Categories)
+            FilteredElementCollector elementsInView = new FilteredElementCollector(doc);
+            FillPatternElement solidFillPattern = elementsInView.OfClass(typeof(FillPatternElement)).Cast<FillPatternElement>().First(a => a.GetFillPattern().IsSolidFill);
+
+
+            List<BuiltInCategory> builtInCats = new List<BuiltInCategory>
             {
-                if (cat.AllowsBoundParameters)
-                    categoryNames.Add(cat.Name);
+                BuiltInCategory.OST_Rebar
+            };
+
+            ElementMulticategoryFilter filter1 = new ElementMulticategoryFilter(builtInCats);
+
+
+            IList<Element> visibleElements = new FilteredElementCollector(doc, doc.ActiveView.Id).WherePasses(filter1).WhereElementIsNotElementType().ToElements();
+
+            //string colorParam = "Type";
+            //string colorParam = "Shape";
+            string colorParam = "FBA_Slice";
+
+            var grouped = visibleElements.GroupBy(x => x.LookupParameter(colorParam).AsValueString());
+
+            //Random pRand = new Random();
+            var md5 = MD5.Create();
+            OverrideGraphicSettings ogs = new OverrideGraphicSettings();
+            ogs.SetSurfaceForegroundPatternId(solidFillPattern.Id);
+
+
+            string error = "";
+            using (Transaction t = new Transaction(doc, "Override Colors"))
+            {
+                t.Start();
+                foreach (var element in grouped)
+                {
+
+
+                    var firstElement = element.First();
+
+                    string colorName = "xx";
+
+
+                    colorName = firstElement.LookupParameter(colorParam).AsValueString();
+
+
+
+                    if (colorName == null)
+                    {
+                        colorName = "null";
+                    }
+                    var hash = md5.ComputeHash(Encoding.UTF8.GetBytes(colorName));
+
+
+                    Autodesk.Revit.DB.Color pcolor = new Autodesk.Revit.DB.Color(hash[0], hash[1], hash[2]);
+
+                    //TaskDialog.Show("P", String.Format("{0}, {1},{2},{3}", colorName, hash[0], hash[1], hash[2]));
+
+                    ogs.SetSurfaceForegroundPatternColor(pcolor);
+
+                    ogs.SetProjectionLineColor(pcolor);
+
+
+                    try
+                    {
+                        //foreach (FamilyInstance item in element)
+                        foreach (var item in element)
+                        {
+                            doc.ActiveView.SetElementOverrides(item.Id, ogs);
+
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        error = ex.Message;
+                    }
+                }
+
+                t.Commit();
             }
+        }
+
+        private void InvertLayers(UIApplication uiapp)
+        {
+            Document doc = uiapp.ActiveUIDocument.Document;
+
+            ICollection<ElementId> selectedBars = uiapp.ActiveUIDocument.Selection.GetElementIds();
+
+            var maxLayer = selectedBars
+                    .Select(id => doc.GetElement(id))
+                    .Where(e => e != null)
+                    .Select(e => e.LookupParameter("FBA_SliceLayer").AsValueString())
+                    .Where(val => !string.IsNullOrEmpty(val))
+                    .Select(val => val.Replace("L", "")) // remove 'L'
+                    .Select(val =>
+                    {
+                        int num;
+                        return int.TryParse(val, out num) ? (int?)num : null;
+                    })
+                    .Where(num => num.HasValue)
+                    .Max(num => num.Value);
+
+            using (Transaction t = new Transaction(doc, "Invert slice layers"))
+            {
+                t.Start();
+
+                foreach (ElementId eid in selectedBars)
+                {
+
+                    Element e = uiapp.ActiveUIDocument.Document.GetElement(eid);
+
+                    int currentSlice = int.Parse(e.LookupParameter("FBA_SliceLayer").AsValueString().Replace("L", ""));
+
+                    string newSlice = "L" + (maxLayer + 1 - currentSlice);
+
+                    e.LookupParameter("FBA_SliceLayer").Set(newSlice);
+                }
+
+
+                t.Commit();
+
+            }
+
+            TaskDialog.Show("Invert Slice Layers", "Done");
+        }
+
+        private void SelectSliceBars(UIApplication uiapp)
+        {
+            string selectedSegment = Window.cboxUniqueIds.SelectedItem.ToString();
+            string selectedSlice = Window.cboxSlices.SelectedItem.ToString();
+
+            var SelectedBars = VisibleRebars
+                            .Where(x => x.LookupParameter("LOR_UniqueID (SRC_FBA)")?.AsValueString() == selectedSegment &&
+                            x.LookupParameter("FBA_Slice")?.AsValueString() == selectedSlice)
+                            .Select(x => x.Id)
+                            .ToList();
+
+            uiapp.ActiveUIDocument.Selection.SetElementIds(SelectedBars);
+            
+        }
+
+        private void LoadRebars(UIApplication uiapp)
+        {
+            Document doc = uiapp.ActiveUIDocument.Document;
+
+            VisibleRebars = new FilteredElementCollector(doc, doc.ActiveView.Id).OfCategory(BuiltInCategory.OST_Rebar).WhereElementIsNotElementType().ToElements();
+
+            var uniqueIds = VisibleRebars
+                    .Select(x => x.LookupParameter("LOR_UniqueID (SRC_FBA)")?.AsValueString())
+                    .Where(id => !string.IsNullOrEmpty(id))
+                    .Distinct()
+                    .ToList();
+
+            //uniqueIds.Sort();
+
 
             Window?.Dispatcher.Invoke(() =>
             {
-                Window.comboCategories.ItemsSource = categoryNames.OrderBy(n => n).ToList();
+                Window.cboxUniqueIds.ItemsSource = uniqueIds.OrderBy(n => n).ToList();
             });
         }
 
-        /// <summary>
-        ///   The main door-modification subroutine - called from every request 
-        /// </summary>
-        /// <remarks>
-        ///   It searches the current selection for all doors
-        ///   and if it finds any it applies the requested operation to them
-        /// </remarks>
-        /// <param name="uiapp">The Revit application object</param>
-        /// <param name="text">Caption of the transaction for the operation.</param>
-        /// <param name="operation">A delegate to perform the operation on an instance of a door.</param>
-        /// 
-        private void ModifySelectedDoors(UIApplication uiapp, String text, DoorOperation operation)
+
+        private void UpdateSlicesList(UIApplication uiapp)
         {
-            //TaskDialog.Show("Revit", text);
+            string selectedSegment = Window.cboxUniqueIds.SelectedItem.ToString();
+            string selectedSlice = Window.cboxSlices.SelectedIndex.ToString();
 
-            UIDocument uidoc = uiapp.ActiveUIDocument;
+            var currentSegmentSlices = VisibleRebars
+                .Where(x => x.LookupParameter("LOR_UniqueID (SRC_FBA)")?.AsValueString() == selectedSegment)
+                .Select(x => x.LookupParameter("FBA_Slice")?.AsValueString())
+                .Where(slice => !string.IsNullOrEmpty(slice))
+                .Distinct()
+                .ToList();
 
-            // check if there is anything selected in the active document
-
-            if ((uidoc != null) && (uidoc.Selection != null))
+            Window?.Dispatcher.Invoke(() =>
             {
-                ICollection<ElementId> selElements = uidoc.Selection.GetElementIds();
-                if (selElements.Count > 0)
-                {
-                    // Filter out all doors from the current selection
-
-                    FilteredElementCollector collector = new FilteredElementCollector(uidoc.Document, selElements);
-                    ICollection<Element> doorset = collector.OfCategory(BuiltInCategory.OST_Doors).ToElements();
-
-                    if (doorset != null)
-                    {
-                        // Since we'll modify the document, we need a transaction
-                        // It's best if a transaction is scoped by a 'using' block
-                        using (Transaction trans = new Transaction(uidoc.Document))
-                        {
-                            // The name of the transaction was given as an argument
-
-                            if (trans.Start(text) == TransactionStatus.Started)
-                            {
-                                // apply the requested operation to every door
-
-                                foreach (FamilyInstance door in doorset)
-                                {
-                                    operation(door);
-                                }
-
-                                trans.Commit();
-                            }
-                        }
-                    }
-                }
-            }
+                Window.cboxSlices.ItemsSource = currentSegmentSlices.OrderBy(n => n).ToList();
+            });
         }
 
 
-        //////////////////////////////////////////////////////////////////////////
-        //
-        // Helpers - simple delegates operating upon an instance of a door
-
-        private void FlipHandAndFace(FamilyInstance e)
-        {
-            e.flipFacing(); e.flipHand();
-        }
-
-        // Note: The door orientation [left/right] is according the common
-        // conventions used by the building industry in the Czech Republic.
-        // If the convention is different in your county (like in the U.S),
-        // swap the code of the MakeRight and MakeLeft methods.
-
-        private static void MakeLeft(FamilyInstance e)
-        {
-            if (e.FacingFlipped ^ e.HandFlipped) e.flipHand();
-        }
-
-        private void MakeRight(FamilyInstance e)
-        {
-            if (!(e.FacingFlipped ^ e.HandFlipped)) e.flipHand();
-        }
-
-        // Note: The In|Out orientation depends on the position of the
-        // wall the door is in; therefore it does not necessary indicates
-        // the door is facing Inside, or Outside, respectively.
-        // The presented implementation is good enough to demonstrate
-        // how to flip a door, but the actual algorithm will likely
-        // have to be changes in a read-world application.
-
-        private void TurnIn(FamilyInstance e)
-        {
-            if (!e.FacingFlipped) e.flipFacing();
-        }
-
-        private void TurnOut(FamilyInstance e)
-        {
-            if (e.FacingFlipped) e.flipFacing();
-        }
 
     }  // class
 

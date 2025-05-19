@@ -34,40 +34,12 @@ namespace rvtRebars
        /// None
        /// </summary>
        None = 0,
-       /// <summary>
-       /// "Delete" request
-       /// </summary>
-       Delete = 1,
-       /// <summary>
-       /// "FlipLeftRight" request
-       /// </summary>
-       FlipLeftRight = 2,
-       /// <summary>
-       /// "FlipInOut" request
-       /// </summary>
-       FlipInOut = 3,
-       /// <summary>
-       /// "MakeRight" request
-       /// </summary>
-       MakeRight = 4,
-       /// <summary>
-       /// "MakeLeft" request
-       /// </summary>
-       MakeLeft = 5,
-       /// <summary>
-       /// "TurnOut" request
-       /// </summary>
-       TurnOut = 6,
-       /// <summary>
-       /// "TurnIn" request
-       /// </summary>
-       TurnIn = 7,
-       /// <summary>
-       /// "Rotate" request
-       /// </summary>
-       Rotate = 8,
-        Populate = 9,
-        Update = 10
+        LoadRebars = 1,
+        UpdateSlices = 2,
+        Select = 3,
+        InvertLayers = 4,
+        ColorBySlice = 5,
+        ZoomTo = 6
     }
 
    /// <summary>
