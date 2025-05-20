@@ -20,3 +20,9 @@ bld/
 
 bin/Debug/net481/rvtRebars.dll
 bin/Debug/net481/rvtRebars.pdb
+obj/Debug/net481/rvtRebars.AssemblyInfoInputs.cache
+obj/Debug/net481/rvtRebars.assets.cache
+obj/Debug/net481/rvtRebars.csproj.AssemblyReference.cache
+obj/Debug/net481/rvtRebars.GeneratedMSBuildEditorConfig.editorconfig
+obj/Debug/net481/rvtRebars_MarkupCompile.cache
+obj/Debug/net481/rvtRebars_MarkupCompile.lref

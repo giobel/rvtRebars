@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using Autodesk.Revit.UI;
 
@@ -22,6 +23,26 @@ namespace rvtRebars
 
 		public Window1(ExternalEvent exEvent, RequestHandler handler)
 		{
+
+			// check image source path
+		
+		// 	Assembly a = Assembly.GetExecutingAssembly();
+
+			// 	MessageBox.Show(a.ToString());
+
+			// 	var uri = new Uri("pack://application:,,,/rvtRebars;component/Resources/clash2.png", UriKind.Absolute);
+
+			// var stream = Application.GetResourceStream(uri)?.Stream;
+			// 	if (stream == null)
+			// 	{
+			// 		MessageBox.Show("Image not found");
+			// 	}
+			// 	else
+			// 	{
+			// 		MessageBox.Show("Hello");
+			// 	}
+
+
 			InitializeComponent();
 			m_Handler = handler;
 			m_ExEvent = exEvent;

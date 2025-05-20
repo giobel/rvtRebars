@@ -135,8 +135,8 @@ namespace rvtRebars
 
         private void ZoomTo(UIApplication uiapp)
         {
-            string selectedSegment = Window.cboxUniqueIds.SelectedItem.ToString();
-            string selectedSlice = Window.cboxSlices.SelectedItem.ToString();
+            string selectedSegment = Window.cboxUniqueIds.SelectedItem?.ToString();
+            string selectedSlice = Window.cboxSlices.SelectedItem?.ToString();
 
 
             if (selectedSegment == null || selectedSlice == null)
