@@ -11,10 +11,12 @@ _ReSharper.*
 x64/
 x86/
 bld/
-[Bb]in/
+**[Bb]in/
 [Oo]bj/
 [Ll]og/
 
 # Visual Studio 2015 cache/options directory
 .vs/
 
+bin/Debug/net481/rvtRebars.dll
+bin/Debug/net481/rvtRebars.pdb

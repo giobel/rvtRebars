@@ -138,6 +138,14 @@ namespace rvtRebars
             string selectedSegment = Window.cboxUniqueIds.SelectedItem.ToString();
             string selectedSlice = Window.cboxSlices.SelectedItem.ToString();
 
+
+            if (selectedSegment == null || selectedSlice == null)
+            {
+                TaskDialog.Show("Warning", "Please pick UniqueId and Slice first");
+            }
+            else
+            {
+                
             var SelectedBars = VisibleRebars
                 .Where(x => x.LookupParameter("LOR_UniqueID (SRC_FBA)")?.AsValueString() == selectedSegment &&
                 x.LookupParameter("FBA_Slice")?.AsValueString() == selectedSlice)
@@ -145,6 +153,7 @@ namespace rvtRebars
                 .ToList();
 
             uiapp.ActiveUIDocument.ShowElements(SelectedBars);
+            }
         }
 
         private void ColorBySlice(UIApplication uiapp)
@@ -281,14 +290,8 @@ namespace rvtRebars
 
         private void SelectSliceBars(UIApplication uiapp)
         {
-            string selectedSegment = Window.cboxUniqueIds.SelectedItem.ToString();
-            string selectedSlice = Window.cboxSlices.SelectedItem.ToString();
-
-            var SelectedBars = VisibleRebars
-                            .Where(x => x.LookupParameter("LOR_UniqueID (SRC_FBA)")?.AsValueString() == selectedSegment &&
-                            x.LookupParameter("FBA_Slice")?.AsValueString() == selectedSlice)
-                            .Select(x => x.Id)
-                            .ToList();
+            string selectedSegment = Window.cboxUniqueIds.SelectedItem?.ToString();
+            string selectedSlice = Window.cboxSlices.SelectedItem?.ToString();
 
             if (selectedSegment == null || selectedSlice == null)
             {
@@ -296,6 +299,14 @@ namespace rvtRebars
             }
             else
             {
+
+            var SelectedBars = VisibleRebars
+                            .Where(x => x.LookupParameter("LOR_UniqueID (SRC_FBA)")?.AsValueString() == selectedSegment &&
+                            x.LookupParameter("FBA_Slice")?.AsValueString() == selectedSlice)
+                            .Select(x => x.Id)
+                            .ToList();
+
+
                 uiapp.ActiveUIDocument.Selection.SetElementIds(SelectedBars);
             }
             

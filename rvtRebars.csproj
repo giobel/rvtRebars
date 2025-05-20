@@ -58,9 +58,13 @@
     <EmbeddedResource Include="Resources\scale.png" />
     <EmbeddedResource Include="Resources\SelectArea.png" />
     <EmbeddedResource Include="Resources\invert.png" />
+
+    
   </ItemGroup>
-
-
+  
+<ItemGroup>
+  <Resource Include="Resources\clash2.png"/>
+</ItemGroup>  
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(AppData)\Autodesk\Revit\Addins\2024" />

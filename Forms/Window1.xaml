@@ -80,7 +80,10 @@
 			Click="BtnZoomTo"
 			Width="35"
             >
-        <Image Source="Resources/clash.png"/>
+        <Image Source="Resources/clash2.png" 				
+                Width="16"
+				Height="16"/>
+        
         </Button>
 			
             <TextBlock
@@ -115,12 +118,16 @@
 			Margin="0,0,0,56.92"
 			Width="50"
 			Height="39.2"></TextBlock>
+
+            <!-- SELECT  -->
 		<Button
 			Grid.Row="1"
 			Grid.Column="2"
 			Height="32.8"
 			Margin="0,0,0,0"
-			Content=""
+			Content="&#xe8b3;"
+            FontFamily="Segoe MDL2 Assets" 
+            FontSize="32"
 			Click="BtnSelectClick"
 			Width="35"></Button>
 		<TextBlock
