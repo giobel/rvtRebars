@@ -77,8 +77,13 @@
 			Height="82"
 			Click="BtnZoomTo"
 			Width="70"
+			HorizontalAlignment="Center"
+			VerticalAlignment="Stretch"
             >
-            <StackPanel>
+            <StackPanel
+			    HorizontalAlignment="Center"
+                VerticalAlignment="Stretch"
+			>
 
             <Image Source="pack://application:,,,/rvtRebars;component/Resources/binoculars.png" 				
                 Width="32"
@@ -90,10 +95,7 @@
                 Text="Zoom to"
                 TextWrapping="Wrap"
                 TextAlignment="Center"
-                Grid.Column="0"
-                Grid.Row="2"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Stretch"
+
                 Width="70"
                 Height="50">
             </TextBlock>
@@ -111,28 +113,32 @@
             BorderThickness="0"
 			Grid.Row="1"
 			Grid.Column="1"
-			Height="35"
-			Margin="0,0,0,0"
-
+			Height="82"
+			Width="70"
 			Click="BtnColorBySlice"
-			Width="35">
+						HorizontalAlignment="Center"
+			VerticalAlignment="Stretch"
+			>
+			     <StackPanel>
                 <Image Source="pack://application:,,,/rvtRebars;component/Resources/rainbow.png" 				
                 Width="32"
 				Height="32"
 				Stretch="Uniform"
                 />
-        </Button>
 		<TextBlock
 			Text="Colour Slices"
 			TextWrapping="Wrap"
 			TextAlignment="Center"
-			Grid.Column="1"
-			Grid.Row="2"
 			HorizontalAlignment="Center"
 			VerticalAlignment="Stretch"
 			Margin="0,0,0,56.92"
 			Width="50"
-			Height="39.2"></TextBlock>
+			Height="50"></TextBlock>
+
+
+            </StackPanel>
+
+        </Button>
 
             <!-- SELECT  -->
             <!-- Content="&#xe8b3;"
@@ -143,29 +149,31 @@
 			BorderThickness="0"
 			Grid.Row="1"
 			Grid.Column="2"
-			Height="35"
+			Height="82"
 			Margin="0,0,0,0"
-
+			HorizontalAlignment="Center"
+			VerticalAlignment="Stretch"
 			Click="BtnSelectClick"
-			Width="35">
+			Width="70">
+            <StackPanel>
         
                 <Image Source="pack://application:,,,/rvtRebars;component/Resources/addToSelection.png" 				
                 Width="32"
 				Height="32"
 				Stretch="Uniform"
                 />
-        </Button>
 		<TextBlock
 			Text="Select Rebars"
 			TextWrapping="Wrap"
 			TextAlignment="Center"
-			Grid.Column="2"
-			Grid.Row="2"
 			HorizontalAlignment="Center"
 			VerticalAlignment="Stretch"
-			Margin="0,0,0,56.92"
 			Width="70"
-			Height="39.2"></TextBlock>
+			Height="50"></TextBlock>
+
+            </StackPanel>
+
+        </Button>
 
             <!-- INVERT LAYERS -->
             <!-- Content="&#xE8B1;"
@@ -176,28 +184,29 @@
 			BorderThickness="0"
 			Grid.Row="1"
 			Grid.Column="3"
-			Height="35"
+			Height="82"
 			Margin="0,0,0,0"
 
 			Click="BtnInvertLayers"
-			Width="35">
+			Width="70">
+            <StackPanel>
+
+
                 <Image Source="pack://application:,,,/rvtRebars;component/Resources/shuffle.png" 				
                 Width="32"
 				Height="32"
 				Stretch="Uniform"
                 />
-        </Button>
 		<TextBlock
 			Text="Invert Layers"
 			TextWrapping="Wrap"
 			TextAlignment="Center"
-			Grid.Column="3"
-			Grid.Row="2"
-			HorizontalAlignment="Center"
-			VerticalAlignment="Stretch"
-			Margin="0,0,0,56.92"
-			Width="50"
-			Height="39.2"></TextBlock>
+			Width="70"
+			Height="50"></TextBlock>
+            </StackPanel>
+
+        </Button>
+
 	</Grid>
 
 </Window>

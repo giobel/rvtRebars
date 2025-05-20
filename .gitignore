@@ -1,5 +1,7 @@
 *.suo
 *.user
+*.dll
+*.pdb
 _ReSharper.*
 
 
