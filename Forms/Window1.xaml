@@ -3,96 +3,156 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:rvtRebars"
 		xmlns:local="clr-namespace:rvtRebars"
-        
 	Title="Slice Inverter" Height="300" Width="300"
     Topmost="True"
     WindowStartupLocation="CenterScreen">
 
 
-		<StackPanel Margin="0,10,0,0">
-
-
-
-            <GroupBox Header="Segment UniqueID:" BorderThickness="0" Margin="0,0,0,5">
-                
-                    <ComboBox x:Name="cboxUniqueIds"   
-                        Margin = "0,5,0,0"
-                        Height="25"   
-                        VerticalAlignment="Top"  
-                        BorderThickness="1"  
-                        VerticalContentAlignment="Center"  
-                        Background="Transparent"  
-                        Foreground="Black"                         
-                        SelectionChanged="comboUniqueIds_SelectionChanged"
-                        />
-           
-            </GroupBox>
-
-            <GroupBox Header="Slice:" BorderThickness="0" Margin="0,0,0,5">
-                    <ComboBox x:Name="cboxSlices"   
-                        Margin = "0,5,0,0"
-                        Height="25"   
-                        VerticalAlignment="Top"  
-                        BorderThickness="1"  
-                        VerticalContentAlignment="Center"  
-                        Background="Transparent"  
-                        Foreground="Black"                         
-						SelectionChanged="cboxSlices_SelectionChanged" 
-					/>
-            </GroupBox>             
-
-            <StackPanel
-			Orientation="Horizontal"
-			HorizontalAlignment="Center"
-			Margin="0,0,0,0">
-
-
-
-			<Button
-				Width="90"
-				Height="32.8"
-				Margin="0,0,25,0"
-				Content="Select"
-                Click="BtnSelectClick" >
-            </Button>
-                
-			<Button
-				Width="90"
-				Height="32.8"
-				Margin="25,0,0,0"
-				Content="Invert Layers"
-                Click = "BtnInvertLayers"                
-                >
-            </Button>
-
+		<Grid
+		Margin="10,10,10,10"
+		HorizontalAlignment="Center">
+		<Grid.RowDefinitions>
+			<RowDefinition
+				Height="Auto" />
+			<RowDefinition
+				Height="Auto" />
+			<RowDefinition
+				Height="Auto" />
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition
+				Width="70" />
+			<ColumnDefinition
+				Width="70" />
+			<ColumnDefinition
+				Width="70" />
+			<ColumnDefinition
+				Width="70" />
+		</Grid.ColumnDefinitions>
+		<StackPanel
+			Margin="0,0,0,10"
+			Grid.Row="0"
+			Grid.ColumnSpan="4">
+			<GroupBox
+				Header="Segment UniqueID:"
+				BorderThickness="0"
+				Margin="0,0,0,5">
+				<ComboBox
+					x:Name="cboxUniqueIds"
+					Margin="0,5,0,0"
+					Height="25"
+					VerticalAlignment="Top"
+					BorderThickness="1"
+					VerticalContentAlignment="Center"
+					Background="Transparent"
+					Foreground="Black"
+					SelectionChanged="comboUniqueIds_SelectionChanged" />
+			</GroupBox>
+			<GroupBox
+				Header="Slice:"
+				BorderThickness="0"
+				Margin="0,0,0,5">
+				<ComboBox
+					x:Name="cboxSlices"
+					Margin="0,5,0,0"
+					Height="25"
+					VerticalAlignment="Top"
+					BorderThickness="1"
+					VerticalContentAlignment="Center"
+					Background="Transparent"
+					Foreground="Black"
+					SelectionChanged="cboxSlices_SelectionChanged" />
+			</GroupBox>
 		</StackPanel>
 
-
-            <StackPanel
-			Orientation="Horizontal"
+        <!-- ZOOM TO -->
+<!-- 
+                    FontFamily="Segoe MDL2 Assets" 
+            FontSize="16"
+            Content ="&#xe8a3;" -->
+		<Button
+			Grid.Row="1"
+			Grid.Column="0"
+            Background="Transparent"
+            BorderThickness="0"
+			Height="32.8"
+			Margin="0,0,0,0"
+			Click="BtnZoomTo"
+			Width="35"
+            >
+        <Image Source="Resources/clash.png"/>
+        </Button>
+			
+            <TextBlock
+			Text="Zoom to"
+			TextWrapping="Wrap"
+			TextAlignment="Center"
+			Grid.Column="0"
+			Grid.Row="2"
 			HorizontalAlignment="Center"
-			Margin="0,0,0,0">
-
+			VerticalAlignment="Stretch"
+			Margin="0,0,0,56.92"
+			Width="70"
+			Height="39.2"></TextBlock>
+		
+            <!-- COLOR BY SLICE -->
             <Button
-				Width="90"
-				Height="32.8"
-				Margin="0,0,25,0"
-				Content="Zoom to"
-                Click="BtnZoomTo" >
-            </Button>
-
-            <Button
-				Width="90"
-				Height="32.8"
-				Margin="0,0,25,0"
-				Content="Color Slice"
-                Click="BtnColorBySlice" >
-            </Button>
-
-        </StackPanel>
-
-
-		<TextBlock x:Name="OutputText"/>
-    </StackPanel>
+			Grid.Row="1"
+			Grid.Column="1"
+			Height="32.8"
+			Margin="0,0,0,0"
+			Content=""
+			Click="BtnColorBySlice"
+			Width="35"></Button>
+		<TextBlock
+			Text="Colour Slices"
+			TextWrapping="Wrap"
+			TextAlignment="Center"
+			Grid.Column="1"
+			Grid.Row="2"
+			HorizontalAlignment="Center"
+			VerticalAlignment="Stretch"
+			Margin="0,0,0,56.92"
+			Width="50"
+			Height="39.2"></TextBlock>
+		<Button
+			Grid.Row="1"
+			Grid.Column="2"
+			Height="32.8"
+			Margin="0,0,0,0"
+			Content=""
+			Click="BtnSelectClick"
+			Width="35"></Button>
+		<TextBlock
+			Text="Select"
+			TextWrapping="Wrap"
+			TextAlignment="Center"
+			Grid.Column="2"
+			Grid.Row="2"
+			HorizontalAlignment="Center"
+			VerticalAlignment="Stretch"
+			Margin="0,0,0,56.92"
+			Width="70"
+			Height="39.2"></TextBlock>
+		<Button
+			Grid.Row="1"
+			Grid.Column="3"
+			Height="32.8"
+			Margin="0,0,0,0"
+			Content=""
+			Click="BtnInvertLayers"
+			Width="35"></Button>
+		<TextBlock
+			Text="Invert Layers"
+			TextWrapping="Wrap"
+			TextAlignment="Center"
+			Grid.Column="3"
+			Grid.Row="2"
+			HorizontalAlignment="Center"
+			VerticalAlignment="Stretch"
+			Margin="0,0,0,56.92"
+			Width="50"
+			Height="39.2"></TextBlock>
+	</Grid>
 
 </Window>

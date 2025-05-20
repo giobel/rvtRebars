@@ -236,6 +236,11 @@ namespace rvtRebars
 
             ICollection<ElementId> selectedBars = uiapp.ActiveUIDocument.Selection.GetElementIds();
 
+            if (selectedBars.Count < 1)
+            {
+                TaskDialog.Show("Warning", "Please select some rebars");
+            }
+
             var maxLayer = selectedBars
                     .Select(id => doc.GetElement(id))
                     .Where(e => e != null)
@@ -285,7 +290,14 @@ namespace rvtRebars
                             .Select(x => x.Id)
                             .ToList();
 
-            uiapp.ActiveUIDocument.Selection.SetElementIds(SelectedBars);
+            if (selectedSegment == null || selectedSlice == null)
+            {
+                TaskDialog.Show("Warning", "Please pick UniqueId and Slice first");
+            }
+            else
+            {
+                uiapp.ActiveUIDocument.Selection.SetElementIds(SelectedBars);
+            }
             
         }
 

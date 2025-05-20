@@ -60,10 +60,10 @@
     <EmbeddedResource Include="Resources\invert.png" />
   </ItemGroup>
 
+
+
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Copy
-      SourceFiles="$(TargetPath)"
-      DestinationFolder="$(AppData)\Autodesk\Revit\Addins\2024" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(AppData)\Autodesk\Revit\Addins\2024" />
   </Target>
   
 

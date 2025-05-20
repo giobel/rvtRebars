@@ -110,7 +110,7 @@ namespace rvtRebars
 
 		private void BtnZoomTo(object sender, EventArgs e)
 		{
-		MakeRequest(RequestId.ColorBySlice);
+		MakeRequest(RequestId.ZoomTo);
 	}
 
 
