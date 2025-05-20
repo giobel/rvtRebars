@@ -56,7 +56,7 @@
     <EmbeddedResource Include="Resources\clean.png" />
     <EmbeddedResource Include="Resources\cogRebars.png" />
     <EmbeddedResource Include="Resources\scale.png" />
-    <EmbeddedResource Include="Resources\SelectArea.png" />
+    <EmbeddedResource Include="Resources\selectArea.png" />
     <EmbeddedResource Include="Resources\invert.png" />
 
     

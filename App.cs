@@ -56,7 +56,7 @@ namespace rvtRebars
                 
                     
                     if (AddPushButton(cogs, assemblyPath, "btnReoWeight", "Reo Weight", null, "rvtRebars.Resources.scale.png",
-"rvtRebars.ReoWeight", "Refer to documentation") == false)
+                        "rvtRebars.ReoWeight", "Refer to documentation") == false)
                 {
                     MessageBox.Show("Failed to add rebars cog", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
