@@ -39,9 +39,9 @@ namespace rvtRebars
                 // allSheetsIds.OrderByDescending(r => doc.GetElement(r).LookupParameter("Sheet Number").AsValueString()).ToList();
 
 
-                uidoc.ActiveView = uidoc.ActiveGraphicalView;
+                //uidoc.ActiveView = uidoc.ActiveGraphicalView;
 
-                string headers = "ElementId,Drg Number,FBA_DrawingSegmentIds";
+                string headers = "ElementId,Drg Number,Drg Name,FBA_DrawingSegmentIds,Revision";
 
 
                 foreach (ElementId eid in allSheetsIds)
@@ -50,15 +50,18 @@ namespace rvtRebars
 
                     ViewSheet vs = e as ViewSheet;
 
-                    string segIds = e.LookupParameter("FBA_DrawingSegmentIds").AsValueString();
-                    
-                    //if (segIds != null)
-                        segIds = Regex.Replace(segIds, @"\r\n?|\n", ", ");
-                    
-                        string csvLine = $"{eid},{vs.LookupParameter("DOC CODE").AsString()}-{vs.SheetNumber},\"{vs.Name}\",\"{segIds}\",{vs.LookupParameter("Current Revision").AsValueString()}";
+                    string segIds = e.LookupParameter("FBA_DrawingSegmentIds")?.AsValueString() ?? "";;
 
-                        sb.AppendLine(csvLine);
-                    //}                
+                    segIds = Regex.Replace(segIds, @"\r\n?|\n", ", ");
+
+                    string docCode = vs.LookupParameter("DOC CODE")?.AsString() ?? "";
+                    string currentRev = vs.LookupParameter("Current Revision")?.AsValueString() ?? "";
+
+                    string csvLine = $"{eid},{docCode}-{vs.SheetNumber},\"{vs.Name}\",\"{segIds}\",{currentRev}";
+
+                    sb.AppendLine(csvLine);
+                                    
+                }
                     
 
                 
@@ -73,7 +76,6 @@ namespace rvtRebars
                 process.Start();
 
           
-            }
             }
             catch (Exception ex)
             {

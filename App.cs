@@ -102,11 +102,17 @@ namespace rvtRebars
 
                     RibbonPanel utilities = GetSetRibbonPanel(a, tabName, "Utilities");
                     
-                    if (AddPushButton(utilities,assemblyPath, "btnSelectBars", "Select Rebars", null, "rvtRebars.Resources.selectArea.png", 
-                    "rvtRebars.SelectRebars", "Select rebars only (works inside groups too)") == false)
+                    if (AddPushButton(utilities,assemblyPath, "btnFaceSection", "Face Section", null, "rvtRebars.Resources.selectArea.png", 
+                    "rvtRebars.SectionByFace", "Section aligned to selected face") == false)
                     {
                         MessageBox.Show("Failed to add button zoom", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
+                    
+                    if (AddPushButton(utilities, assemblyPath, "btnSelectBars", "Select Rebars", null, "rvtRebars.Resources.selectArea.png",
+            "rvtRebars.SelectRebars", "Select rebars only (works inside groups too)") == false)
+                {
+                    MessageBox.Show("Failed to add button zoom", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
 
                     if (AddPushButton(utilities,assemblyPath, "btnZoom", "Zoom\nSelected", null, "rvtRebars.Resources.info.png",
             "rvtRebars.ZoomSelection", "Refer to documentation") == false)
