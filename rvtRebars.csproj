@@ -58,6 +58,7 @@
     <EmbeddedResource Include="Resources\scale.png" />
     <EmbeddedResource Include="Resources\selectArea.png" />
     <EmbeddedResource Include="Resources\invert.png" />
+    <EmbeddedResource Include="Resources\slice_icon.png" />
 
     
   </ItemGroup>

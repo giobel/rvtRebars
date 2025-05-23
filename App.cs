@@ -102,7 +102,7 @@ namespace rvtRebars
 
                     RibbonPanel utilities = GetSetRibbonPanel(a, tabName, "Utilities");
                     
-                    if (AddPushButton(utilities,assemblyPath, "btnFaceSection", "Face Section", null, "rvtRebars.Resources.selectArea.png", 
+                    if (AddPushButton(utilities,assemblyPath, "btnFaceSection", "Face Section", null, "rvtRebars.Resources.slice_icon.png", 
                     "rvtRebars.SectionByFace", "Section aligned to selected face") == false)
                     {
                         MessageBox.Show("Failed to add button zoom", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
