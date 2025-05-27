@@ -22,71 +22,154 @@ namespace rvtRebars
             Autodesk.Revit.ApplicationServices.Application app = uiapp.Application;
             Document doc = uidoc.Document;
 
-	        Reference elementsInView= uidoc.Selection.PickObject(ObjectType.Element, "Select Elements");
+	        Reference elementsInView= uidoc.Selection.PickObject(ObjectType.Element, "Select Elemen");
 				       
 			FamilySymbol fs = GetFamilySymbolByName(doc, "SphereFamily", "SphereFamily");
-				        
-			using ( Transaction t = new Transaction(doc, "Find Segment COG")) {
-	        	
-	        t.Start();
-	        	
-			Element concrete = doc.GetElement(elementsInView);
-			
-			FamilyInstance fi = concrete as FamilyInstance;
-			
-			FamilyInstance subConcrete = doc.GetElement(fi.GetSubComponentIds().First()) as FamilyInstance;
-			
-			Options options = new Options { ComputeReferences = true, View = doc.ActiveView };
-			
-			if (subConcrete != null){
-				
-			GeometryElement geometryElement = subConcrete.get_Geometry(options);
-		
-			foreach (GeometryObject geoObject in geometryElement){
-            	
-					//Solid solid = geoObject as Solid;
-				
-					Solid solid = null;
-				
-					GeometryInstance gi = geoObject as GeometryInstance;
-					
-					foreach (var giElement in gi.GetInstanceGeometry()) {
-					
-						try{
-						 Solid gisolid = giElement as Solid;
-						 if (gisolid != null && gisolid.Volume > 0)
-						 	solid = gisolid;
-							
-						}
-						catch{}
-						
-					}
-				
-				
-                if (solid != null && solid.Volume > 0)
-                {
-                	XYZ cogPt = solid.ComputeCentroid();
-                	
-                		        	    // Create the family instance
-		            FamilyInstance familyInstance = doc.Create.NewFamilyInstance(
-		                cogPt, // Location point
-		                fs, // FamilySymbol
-		                
-		                StructuralType.NonStructural // Specify if it's structural or non-structural
-		            );
-                		        	    
-                }
-            	
-            	
-            }
-            
-            }//close foreach
-			
 
             
-            	
-	        t.Commit();
-	        }
+
+
+            double concreteDensity = 2400;
+            
+			Options options = new Options { ComputeReferences = true, View = doc.ActiveView };
+				        
+			using (Transaction t = new Transaction(doc, "Find Segment COG"))
+            {
+
+                t.Start();
+
+                Element concrete = doc.GetElement(elementsInView);
+
+                FamilyInstance fi = concrete as FamilyInstance;
+                
+                ICollection<ElementId> eids = fi.GetSubComponentIds();
+                
+                //TaskDialog.Show("R", eids.Count.ToString());
+                
+               
+               
+				double cogX = 0;
+	            double cogY = 0;
+	            double cogZ = 0;
+	            double totalMass = 0; 
+                	
+                	
+               foreach (var eid in eids) {
+                		
+                		
+               FamilyInstance subConcrete = doc.GetElement(eid) as FamilyInstance;
+                		
+               if (subConcrete != null)
+                {
+               	
+               	
+
+                    GeometryElement geometryElement = subConcrete.get_Geometry(options);             
+                    
+                    //TaskDialog.Show("R", geometryElement.Count().ToString());
+                
+                    foreach (GeometryObject geoObject in geometryElement)
+                    {
+
+                    	if (geoObject is Solid){
+                    		
+                    		Solid gisolid = geoObject as Solid;
+                    		
+                    		try{
+                    			
+                    		if (gisolid != null && gisolid.Volume > 0){
+                    		
+                    		XYZ cogPt = gisolid.ComputeCentroid();
+                    		
+                    		double mass = UnitUtils.ConvertFromInternalUnits(gisolid.Volume,UnitTypeId.CubicMeters) * concreteDensity;
+                    		
+                    		//TaskDialog.Show("R", mass.ToString());
+                    		
+                    		
+                            cogX += cogPt.X * mass;
+                            cogY += cogPt.Y * mass;
+                            cogZ += cogPt.Z * mass;
+                            totalMass +=mass;
+                    			}
+                            
+                            }
+                    		
+                    		catch{}
+                    	}
+                    	
+                    	else {
+                    		
+                    		
+                    	
+                    		try{
+
+                        GeometryInstance gi = geoObject as GeometryInstance;
+
+                        foreach (var giElement in gi.GetInstanceGeometry()) //get instance geometry does not existing in this object
+                        {
+
+                            try
+                            {
+                            Solid gisolid = giElement as Solid;
+                            if (gisolid != null && gisolid.Volume > 0)
+                            {
+                             XYZ cogPt = gisolid.ComputeCentroid();
+
+                            double mass = UnitUtils.ConvertFromInternalUnits(gisolid.Volume,UnitTypeId.CubicMeters) * concreteDensity;
+                            
+                            //TaskDialog.Show("R", mass.ToString());
+                            
+                            cogX += cogPt.X * mass;
+                            cogY += cogPt.Y * mass;
+                            cogZ += cogPt.Z * mass;
+
+                            totalMass += mass;
+                                	
+                                	
+                                }
+
+                            }
+                            catch {//TaskDialog.Show("R", "Something wrojng"); 
+                            }
+
+                        }
+                        
+                    		}
+                    		
+                    		catch{
+                    			
+                    		}
+
+                    	}//close else
+
+                    }
+                    
+
+
+      
+                		
+                	}
+                	
+
+                }//close foreach
+
+
+                            XYZ centroid = new XYZ(cogX/totalMass, cogY/totalMass, cogZ/totalMass);
+                            
+                            //TaskDialog.Show("R", (totalMass).ToString());
+
+                           FamilyInstance familyInstance = doc.Create.NewFamilyInstance(
+                              centroid, // Location point
+                              fs, // FamilySymbol
+
+                            StructuralType.NonStructural // Specify if it's structural or non-structural
+                            );
+
+                
+
+
+               
+   
 
             
             return Result.Succeeded;
