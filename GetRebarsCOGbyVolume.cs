@@ -14,7 +14,7 @@ using Autodesk.Revit.DB.Structure;
 namespace rvtRebars
 {
     [Transaction(TransactionMode.Manual)]
-    public class GetRebarsCOG : IExternalCommand
+    public class GetRebarsCOGbyVolume : IExternalCommand
     {
         public Result Execute(
           ExternalCommandData commandData,
@@ -27,7 +27,9 @@ namespace rvtRebars
             Application app = uiapp.Application;
             Document doc = uidoc.Document;
 
-            ICollection<Element> rebarsInView = new FilteredElementCollector(doc, doc.ActiveView.Id).OfCategory(BuiltInCategory.OST_Rebar).WhereElementIsNotElementType().ToElements();
+
+
+			ICollection<Element> rebarsInView = new FilteredElementCollector(doc, doc.ActiveView.Id).OfCategory(BuiltInCategory.OST_Rebar).WhereElementIsNotElementType().ToElements();
 			
 	        double totalMass = 0;
 	        double xWeightedSum = 0;
@@ -39,7 +41,6 @@ namespace rvtRebars
 	        	
 			foreach (var element in rebarsInView) {
 				
-	        	
 	        		
 	        	List<Solid> sourceSolids = GetRebarSolid(doc, element);
 	        		
@@ -56,7 +57,7 @@ namespace rvtRebars
 	           	foreach (var solidBar in sourceSolids) {
 	           		
 	           		
-	           		try{
+	           	try{
 	           		
 	           	XYZ bboxCenter = solidBar.ComputeCentroid();
 	           		
@@ -73,6 +74,8 @@ namespace rvtRebars
 				double convertedVolume = UnitUtils.ConvertFromInternalUnits(volume, UnitTypeId.CubicMeters);
 				double density = 7.850;
 				double tonnes = convertedVolume*density;
+		
+
 				totalMass += tonnes;
 							
 				xWeightedSum += tonnes * bboxCenter.X;

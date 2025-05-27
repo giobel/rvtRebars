@@ -42,36 +42,40 @@ namespace rvtRebars
 			IList<Element> rebars = new FilteredElementCollector(doc, doc.ActiveView.Id).OfCategory(BuiltInCategory.OST_Rebar).WhereElementIsNotElementType().ToElements();
 			
 			double totalW = 0;
+			double totalL = 0;
 			
-			using (Transaction t =  new Transaction(doc, "Add weight")){
-				
+			using (Transaction t = new Transaction(doc, "Add weight"))
+			{
+
 				t.Start();
-				
-				
-			
-			foreach (var element in rebars) {
-				
+
+
+
+				foreach (var element in rebars)
+				{
+
 					double diameter = UnitUtils.ConvertFromInternalUnits(element.LookupParameter("Bar Diameter").AsDouble(), UnitTypeId.Millimeters);
 					//
 					//TaskDialog.Show("R", diameter.ToString());
-					
-					string diameterName = "N"+Math.Round(diameter,0).ToString();
-					
+
+					string diameterName = "N" + Math.Round(diameter, 0).ToString();
+
 					double length = UnitUtils.ConvertFromInternalUnits(element.LookupParameter("Total Bar Length").AsDouble(), UnitTypeId.Meters);
-					
+
 					double rebarWeight = bbarWeight[diameterName] * length;
-					
+
 					totalW += rebarWeight;
-					
-				//element.LookupParameter("Weight (SRC_FBA)").Set(rebarWeight);
-			}
-				
+					totalL += length;
+
+					//element.LookupParameter("Weight (SRC_FBA)").Set(rebarWeight);
+				}
+
 				t.Commit();
-			
+
 			}
 			
 			
-			TaskDialog.Show("R", totalW.ToString());
+			TaskDialog.Show("Results", $"Total Weight: {totalW}kg\nTotal Length: {totalL}");
             
             return Result.Succeeded;
 
