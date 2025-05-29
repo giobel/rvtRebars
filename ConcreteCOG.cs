@@ -5,6 +5,7 @@ using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
 using System.Linq; 
 using Autodesk.Revit.DB.Structure;
+using System;
 
 namespace rvtRebars
 {
@@ -22,184 +23,85 @@ namespace rvtRebars
             Autodesk.Revit.ApplicationServices.Application app = uiapp.Application;
             Document doc = uidoc.Document;
 
-	        Reference elementsInView= uidoc.Selection.PickObject(ObjectType.Element, "Select Elemen");
-				       
-			FamilySymbol fs = GetFamilySymbolByName(doc, "SphereFamily", "SphereFamily");
 
-            
-
-
-            double concreteDensity = 2400;
-            
-			Options options = new Options { ComputeReferences = true, View = doc.ActiveView };
-
-            using (Transaction t = new Transaction(doc, "Find Segment COG"))
+            try
             {
+                Reference selectedRef = uidoc.Selection.PickObject(ObjectType.Element, "Select Element");
+                Element selectedElement = doc.GetElement(selectedRef);
 
-                t.Start();
-
-                Element concrete = doc.GetElement(elementsInView);
-
-                FamilyInstance fi = concrete as FamilyInstance;
-
-                ICollection<ElementId> eids = fi.GetSubComponentIds();
-
-                //TaskDialog.Show("R", eids.Count.ToString());
-
-
-
-                double cogX = 0;
-                double cogY = 0;
-                double cogZ = 0;
-                double totalMass = 0;
-
-
-                //try to get the geomery element first, if it fails use the element subcomponents
-                foreach (var eid in eids)
+                FamilyInstance parentInstance = selectedElement as FamilyInstance;
+                if (parentInstance == null)
                 {
+                    TaskDialog.Show("Error", "Selected element is not a FamilyInstance.");
+                    return Result.Failed;
+                }
+
+                FamilySymbol sphereSymbol = Helpers.GetFamilySymbolByName(doc, "SphereFamily", "SphereFamily");
+                if (sphereSymbol == null)
+                {
+                    TaskDialog.Show("Error", "Sphere family not found in the project.");
+                    return Result.Failed;
+                }
 
 
-                    FamilyInstance subConcrete = doc.GetElement(eid) as FamilyInstance;
+                Options options = new Options { ComputeReferences = true, View = doc.ActiveView };
+                double concreteDensity = 2400; // kg/m³
 
-                    if (subConcrete != null)
+                double cogX = 0, cogY = 0, cogZ = 0, totalMass = 0;
+
+
+                using (Transaction tx = new Transaction(doc, "Place COG Marker"))
+                {
+                    tx.Start();
+
+                    ICollection<ElementId> subComponentIds = parentInstance.GetSubComponentIds();
+
+                    foreach (ElementId id in subComponentIds)
                     {
+                        Element subElement = doc.GetElement(id);
+                        FamilyInstance subInstance = subElement as FamilyInstance;
+                        if (subInstance == null) continue;
 
+                        GeometryElement geom = subInstance.get_Geometry(options);
+                        if (geom == null) continue;
 
-
-                        GeometryElement geometryElement = subConcrete.get_Geometry(options);
-
-                        //TaskDialog.Show("R", geometryElement.Count().ToString());
-
-                        foreach (GeometryObject geoObject in geometryElement)
+                        foreach (GeometryObject obj in geom)
                         {
-
-                            if (geoObject is Solid)
-                            {
-
-                                Solid gisolid = geoObject as Solid;
-
-                                try
-                                {
-
-                                    if (gisolid != null && gisolid.Volume > 0)
-                                    {
-
-                                        XYZ cogPt = gisolid.ComputeCentroid();
-
-                                        double mass = UnitUtils.ConvertFromInternalUnits(gisolid.Volume, UnitTypeId.CubicMeters) * concreteDensity;
-
-                                        //TaskDialog.Show("R", mass.ToString());
-
-
-                                        cogX += cogPt.X * mass;
-                                        cogY += cogPt.Y * mass;
-                                        cogZ += cogPt.Z * mass;
-                                        totalMass += mass;
-                                    }
-
-                                }
-
-                                catch { }
-                            }
-
-                            else
-                            {
-
-
-
-                                try
-                                {
-
-                                    GeometryInstance gi = geoObject as GeometryInstance;
-
-                                    foreach (var giElement in gi.GetInstanceGeometry()) //get instance geometry does not existing in this object
-                                    {
-
-                                        try
-                                        {
-                                            Solid gisolid = giElement as Solid;
-                                            if (gisolid != null && gisolid.Volume > 0)
-                                            {
-                                                XYZ cogPt = gisolid.ComputeCentroid();
-
-                                                double mass = UnitUtils.ConvertFromInternalUnits(gisolid.Volume, UnitTypeId.CubicMeters) * concreteDensity;
-
-                                                //TaskDialog.Show("R", mass.ToString());
-
-                                                cogX += cogPt.X * mass;
-                                                cogY += cogPt.Y * mass;
-                                                cogZ += cogPt.Z * mass;
-
-                                                totalMass += mass;
-
-
-                                            }
-
-                                        }
-                                        catch
-                                        {//TaskDialog.Show("R", "Something wrojng"); 
-                                        }
-
-                                    }
-
-                                }
-
-                                catch
-                                {
-
-                                }
-
-                            }//close else
-
+                            Helpers.ProcessGeometryObject(obj, concreteDensity, ref cogX, ref cogY, ref cogZ, ref totalMass);
                         }
 
+                        if (totalMass == 0)
+                        {
+                            TaskDialog.Show("Error", "No valid geometry found to compute COG.");
+                            return Result.Failed;
+                        }
 
-
-
+                        XYZ centroid = new XYZ(cogX / totalMass, cogY / totalMass, cogZ / totalMass);
+                        doc.Create.NewFamilyInstance(centroid, sphereSymbol, StructuralType.NonStructural);
 
                     }
 
 
-                }//close foreach
+                    tx.Commit();
+                }
 
-
-                XYZ centroid = new XYZ(cogX / totalMass, cogY / totalMass, cogZ / totalMass);
-
-                //TaskDialog.Show("R", (totalMass).ToString());
-
-                FamilyInstance familyInstance = doc.Create.NewFamilyInstance(
-                   centroid, // Location point
-                   fs, // FamilySymbol
-
-                 StructuralType.NonStructural // Specify if it's structural or non-structural
-                 );
-
-
-                t.Commit();
-
-
-
+                return Result.Succeeded;
             }
-            
-            return Result.Succeeded;
 
-
-        }//close execute
-
-            private FamilySymbol GetFamilySymbolByName(Document doc, string familyName, string symbolName)
-    {
-        FilteredElementCollector collector = new FilteredElementCollector(doc)
-            .OfClass(typeof(FamilySymbol));
-
-        foreach (FamilySymbol symbol in collector)
-        {
-            if (symbol.FamilyName == familyName && symbol.Name == symbolName)
+            catch (Autodesk.Revit.Exceptions.OperationCanceledException)
             {
-                return symbol;
+                return Result.Cancelled;
             }
+            catch (Exception ex)
+            {
+                message = ex.Message;
+                return Result.Failed;
+            }
+
+
+
+
         }
 
-        return null;
-    }
     }
 }
