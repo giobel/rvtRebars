@@ -47,18 +47,18 @@ namespace rvtRebars
 
                     string assemblyPath = Assembly.GetExecutingAssembly().Location;
                     
-                    if (AddPushButton(cogs, assemblyPath, "btnSliceLayers", "Invert Slices", null, "rvtRebars.Resources.invert.png",
-                        "rvtRebars.InvertSliceLayers", "Refer to documentation") == false)
-                {
-                    MessageBox.Show("Failed to add rebars cog", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
 
-                
-                    
-                    if (AddPushButton(cogs, assemblyPath, "btnReoWeight", "Reo Weight", null, "rvtRebars.Resources.scale.png",
+                if (AddPushButton(cogs, assemblyPath, "btnReoWeight", "Reo Weight", null, "rvtRebars.Resources.scale.png",
                         "rvtRebars.ReoWeight", "Refer to documentation") == false)
                 {
                     MessageBox.Show("Failed to add rebars cog", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                
+                    
+                    if (AddPushButton(cogs, assemblyPath, "btnCogConcreteReo", "Combined COG", null, "rvtRebars.Resources.cogRebars.png",
+                        "rvtRebars.ConcreteWithReoCOG", "Refer to documentation") == false)
+                {
+                    MessageBox.Show("Failed to add combined cog", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
 
@@ -89,12 +89,19 @@ namespace rvtRebars
                     #region GROUPS
 
                     RibbonPanel groupsTab = GetSetRibbonPanel(a, tabName, "Groups");
+                    
+                                        if (AddPushButton(groupsTab, assemblyPath, "btnSliceLayers", "Invert Slices", null, "rvtRebars.Resources.invert.png",
+                        "rvtRebars.InvertSliceLayers", "Refer to documentation") == false)
+                {
+                    MessageBox.Show("Failed to add rebars cog", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                
 
-                    if (AddPushButton(groupsTab, assemblyPath, "btnExportGroups", "Export Groups", null, "rvtRebars.Resources.exportExcel.png", 
-                    "rvtRebars.ExportGroupsSubElements", "Refer to documentation") == false)
-                    {
-                        MessageBox.Show("Failed to add Export Groups", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    if (AddPushButton(groupsTab, assemblyPath, "btnExportGroups", "Export Groups", null, "rvtRebars.Resources.exportExcel.png",
+        "rvtRebars.ExportGroupsSubElements", "Refer to documentation") == false)
+                {
+                    MessageBox.Show("Failed to add Export Groups", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
 
                     if (AddPushButton(groupsTab, assemblyPath, "btnRegroupBars", "Regroup Bars", null, "rvtRebars.Resources.regroup.png", 
                     "rvtRebars.RegroupBars", "Refer to documentation") == false)
