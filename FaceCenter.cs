@@ -40,9 +40,9 @@ namespace rvtRebars
 
             // Assuming 'face' is a planar Face object you've selected or found
             PlanarFace planarFace = face as PlanarFace;
-            XYZ faceNormal = planarFace.FaceNormal.Normalize();
+            //XYZ faceNormal = planarFace.FaceNormal.Normalize();
 
-            XYZ faceOrigin = planarFace.Origin;
+            //XYZ faceOrigin = planarFace.Origin;
 
 
 
@@ -54,15 +54,15 @@ namespace rvtRebars
             //https://forums.autodesk.com/t5/revit-api-forum/how-to-find-center-of-face/td-p/9210188
             UV faceCentere = GetCenterOfFace(face);
 
-            XYZ centerish = face.Evaluate(faceCentere);
+            //XYZ centerish = face.Evaluate(faceCentere);
 
-            TaskDialog.Show("R", $"{centerish.X}, {centerish.Y}");
+            //TaskDialog.Show("R", $"{centerish.X}, {centerish.Y}");
 
             XYZ centerFace = face.Evaluate(faceCentere);
 
-            TaskDialog.Show("R", $"{centerFace.X}, {centerFace.Y}");
+            //TaskDialog.Show("R", $"{centerFace.X}, {centerFace.Y}");
 
-            XYZ computedFaceNormal = face.ComputeNormal(faceCenter).Normalize();
+            //XYZ computedFaceNormal = face.ComputeNormal(faceCenter).Normalize();
 
             Transform trans = (selectedElement as FamilyInstance).GetTransform();
 
@@ -72,15 +72,6 @@ namespace rvtRebars
             {
 
                 t.Start();
-
-
-
-                FamilyInstance familyInstance2 = doc.Create.NewFamilyInstance(
-                        trans.OfPoint(centerish), // Location point
-                        fs, // FamilySymbol
-
-                        StructuralType.NonStructural // Specify if it's structural or non-structural
-                    );
 
                 FamilyInstance familyInstance3 = doc.Create.NewFamilyInstance(
                         centerFace, // Location point

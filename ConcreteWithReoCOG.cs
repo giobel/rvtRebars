@@ -47,7 +47,9 @@ namespace rvtRebars
                 Reference selectedRef = uidoc.Selection.PickObject(ObjectType.Element, "Select Segment");
                 Element selectedElement = doc.GetElement(selectedRef);
 
-                IList<Reference> selectedReoRef = uidoc.Selection.PickObjects(ObjectType.Element, "Select Reinforcement");
+                ISelectionFilter rebarFilter = new CategorySelectionFilter("Structural Rebar");
+
+                IList<Reference> selectedReoRef = uidoc.Selection.PickObjects(ObjectType.Element,rebarFilter, "Select Reinforcement");
 
 
                 FamilyInstance parentInstance = selectedElement as FamilyInstance;
