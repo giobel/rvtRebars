@@ -36,15 +36,13 @@ namespace rvtRebars
 
             Reference faceRef = uidoc.Selection.PickObject(ObjectType.Face, "Pick a face");
 
-            Element selectedElement = doc.GetElement(faceRef);
-            FamilyInstance fa = selectedElement as FamilyInstance;
-
             GeometryObject geoObj = doc.GetElement(faceRef.ElementId).GetGeometryObjectFromReference(faceRef);
             Face face = geoObj as Face;
 
 			XYZ computedFaceNormal = face.ComputeNormal(Helpers.GetCenterOfFace(face)).Normalize();
             XYZ centerFace = face.Evaluate(Helpers.GetCenterOfFace(face));
 
+            //TaskDialog.Show("R", $"origin {centerFace}");
 
             Reference eleRef = uidoc.Selection.PickObject(ObjectType.Element, "Pick an element");
 
@@ -52,28 +50,40 @@ namespace rvtRebars
 
             LocationPoint locpt = loc as LocationPoint;
             XYZ pt = locpt.Point;
+            XYZ pointOnFace = ProjectPointOntoFace(face, pt, computedFaceNormal);
+            //TaskDialog.Show("R", $"point {pt}");
 
-            double xDist = centerFace.X - pt.X;
-            double yDist = centerFace.Y - pt.Y;
+            double xDist = centerFace.X - pointOnFace.X;
+            double yDist = centerFace.Y - pointOnFace.Y;
+
+            //TaskDialog.Show("R", $"{xDist},{yDist}");
+
             double angle = -7.64081;
-            double radAngle = (Math.PI / 180) * angle;
+            double radAngle = Math.PI / 180 * angle;
 
             double transXdist = xDist * Math.Cos(radAngle) - yDist * Math.Sin(radAngle);
             double transYdist = xDist * Math.Sin(radAngle) + yDist * Math.Cos(radAngle);
 
             TaskDialog.Show("Result", $"offset X {UnitUtils.ConvertFromInternalUnits(transXdist, UnitTypeId.Millimeters)}\n offset Y {UnitUtils.ConvertFromInternalUnits(transYdist, UnitTypeId.Millimeters)}");
 
+            XYZ axisDirection = new XYZ(0, 0, 1); // Z-axis
+            Line axis = Line.CreateUnbound(pointOnFace, axisDirection);
+
             using (Transaction t = new Transaction(doc, "Project to Face"))
             {
 
                 t.Start();
 
-                FamilyInstance familyInstance3 = doc.Create.NewFamilyInstance(
-                        ProjectPointOntoFace(face, pt, computedFaceNormal), // Location point
+                FamilyInstance projectedLocationFamily = doc.Create.NewFamilyInstance(
+                        pointOnFace, // Location point
                         fs, // FamilySymbol
 
                         StructuralType.NonStructural // Specify if it's structural or non-structural
                     );
+
+
+                ElementTransformUtils.RotateElement(doc, projectedLocationFamily.Id, axis, -radAngle);
+
                 t.Commit();
 
             }
