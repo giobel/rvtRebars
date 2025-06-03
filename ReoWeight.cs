@@ -75,7 +75,7 @@ namespace rvtRebars
 			}
 			
 			
-			TaskDialog.Show("Results", $"Total Weight: {totalW}kg\nTotal Length: {totalL}");
+			TaskDialog.Show("Results", $"Total Weight: {Math.Round(totalW,3)}kg\nTotal Length: {Math.Round(totalL)}m");
             
             return Result.Succeeded;
 

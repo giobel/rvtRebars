@@ -55,14 +55,14 @@ namespace rvtRebars
                 }
                 
                     
-                    if (AddPushButton(cogs, assemblyPath, "btnCogConcreteReo", "Combined COG", null, "rvtRebars.Resources.cogRebars.png",
+                    if (AddPushButton(cogs, assemblyPath, "btnCogConcreteReo", "Combined COG", null, "rvtRebars.Resources.combination.png",
                         "rvtRebars.ConcreteWithReoCOG", "Refer to documentation") == false)
                 {
                     MessageBox.Show("Failed to add combined cog", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
 
-                    if (AddPushButton(cogs, assemblyPath, "btnCogConcrete", "Segment COG", null, "rvtRebars.Resources.cogRebars.png", 
+                    if (AddPushButton(cogs, assemblyPath, "btnCogConcrete", "Segment COG", null, "rvtRebars.Resources.concrete.png", 
                     "rvtRebars.ConcreteCOG", "Calculates the centroid of the selected concrete element (must be a family instance, must have sphere family in the model)") == false)
                     {
                         MessageBox.Show("Failed to add rebars cog", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -70,7 +70,7 @@ namespace rvtRebars
 
 
 
-                if (AddPushButton(cogs, assemblyPath, "btnCogRebarsbyVol", "Rebars COG\nby Volume", null, "rvtRebars.Resources.cogRebars.png",
+                if (AddPushButton(cogs, assemblyPath, "btnCogRebarsbyVol", "Rebars COG\nby Volume", null, "rvtRebars.Resources.rebars.png",
                 "rvtRebars.GetRebarsCOGbyVolume", "Refer to documentation") == false)
                 {
                     MessageBox.Show("Failed to add rebars cog", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -122,15 +122,20 @@ namespace rvtRebars
 
                     RibbonPanel utilities = GetSetRibbonPanel(a, tabName, "Utilities");
                     
-                    if (AddPushButton(utilities,assemblyPath, "btnFaceCenter", "Face Center", null, "rvtRebars.Resources.cogRebars.png", 
+                    if (AddPushButton(utilities,assemblyPath, "btnFaceCenter", "Face Center", null, "rvtRebars.Resources.focus.png", 
                     "rvtRebars.FaceCenter", "Center of Face") == false)
                     {
                         MessageBox.Show("Failed to add button zoom", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     
+                    if (AddPushButton(utilities,assemblyPath, "btnProject", "Project to Face", null, "rvtRebars.Resources.sling.png", 
+                    "rvtRebars.ProjectToFace", "Center of Face") == false)
+                    {
+                        MessageBox.Show("Failed to add button zoom", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                     
                     if (AddPushButton(utilities, assemblyPath, "btnFaceSection", "Face Section", null, "rvtRebars.Resources.slice_icon.png",
-            "rvtRebars.SectionByFace", "Section aligned to selected face") == false)
+        "rvtRebars.SectionByFace", "Section aligned to selected face") == false)
                 {
                     MessageBox.Show("Failed to add button zoom", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }

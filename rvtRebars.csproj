@@ -59,6 +59,17 @@
     <EmbeddedResource Include="Resources\selectArea.png" />
     <EmbeddedResource Include="Resources\invert.png" />
     <EmbeddedResource Include="Resources\slice_icon.png" />
+    <EmbeddedResource Include="Resources\focus.png" />
+    <EmbeddedResource Include="Resources\combination.png" />
+    <EmbeddedResource Include="Resources\concrete.png" />
+    <EmbeddedResource Include="Resources\rebars.png" />
+    <EmbeddedResource Include="Resources\sling.png" />
+    <EmbeddedResource Include="Resources\bars.png" />
+
+
+
+
+
 
     
   </ItemGroup>
@@ -73,9 +84,9 @@
   
 </ItemGroup>  
 
-  <!-- <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(AppData)\Autodesk\Revit\Addins\2024" />
-  </Target> -->
+  </Target>
   
 
 </Project>
