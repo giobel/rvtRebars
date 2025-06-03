@@ -36,7 +36,7 @@ namespace rvtRebars
             {
                 LocationPoint locpt = loc as LocationPoint;
                 XYZ pt = locpt.Point;
-                Clipboard.SetText($"{UnitUtils.ConvertFromInternalUnits(pt.X,UnitTypeId.Feet)},{UnitUtils.ConvertFromInternalUnits(pt.Y,UnitTypeId.Feet)},{UnitUtils.ConvertFromInternalUnits(pt.Z,UnitTypeId.Feet)}");
+                Clipboard.SetText($"{UnitUtils.ConvertFromInternalUnits(pt.X,UnitTypeId.Millimeters)},{UnitUtils.ConvertFromInternalUnits(pt.Y,UnitTypeId.Millimeters)},{UnitUtils.ConvertFromInternalUnits(pt.Z,UnitTypeId.Millimeters)}");
                 TaskDialog.Show("Messgae", "Copied to clipboard!");
                 
             }
