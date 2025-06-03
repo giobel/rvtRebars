@@ -35,6 +35,9 @@ namespace rvtRebars
 
 
             Reference faceRef = uidoc.Selection.PickObject(ObjectType.Face, "Pick a face");
+            FamilyInstance fi = doc.GetElement(faceRef.ElementId) as FamilyInstance;
+
+            XYZ rotation = fi.HandOrientation;
 
             GeometryObject geoObj = doc.GetElement(faceRef.ElementId).GetGeometryObjectFromReference(faceRef);
             Face face = geoObj as Face;
@@ -58,9 +61,10 @@ namespace rvtRebars
 
             //TaskDialog.Show("R", $"{xDist},{yDist}");
 
-            double angle = -7.64081;
-            double radAngle = Math.PI / 180 * angle;
 
+            //double angle = -7.64081;
+            double radAngle = Math.PI - Helpers.SignedAngle(XYZ.BasisX, rotation, computedFaceNormal);
+           
             double transXdist = xDist * Math.Cos(radAngle) - yDist * Math.Sin(radAngle);
             double transYdist = xDist * Math.Sin(radAngle) + yDist * Math.Cos(radAngle);
 
@@ -90,6 +94,9 @@ namespace rvtRebars
 
             return Result.Succeeded;
         }
+
+
+
 
         public XYZ ProjectPointOntoFace(Face face, XYZ point, XYZ direction)
         {

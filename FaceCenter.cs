@@ -29,9 +29,10 @@ namespace rvtRebars
             Document doc = uidoc.Document;
 
             Reference faceRef = uidoc.Selection.PickObject(ObjectType.Face, "Pick a face");
-
+            
             Element selectedElement = doc.GetElement(faceRef);
             FamilyInstance fa = selectedElement as FamilyInstance;
+            XYZ rotation = fa.HandOrientation;
 
             GeometryObject geoObj = doc.GetElement(faceRef.ElementId).GetGeometryObjectFromReference(faceRef);
             Face face = geoObj as Face;
@@ -39,17 +40,16 @@ namespace rvtRebars
             FamilySymbol fs = Helpers.GetFamilySymbolByName(doc, "SphereFamily", "SphereFamily");
 
             // Assuming 'face' is a planar Face object you've selected or found
-            PlanarFace planarFace = face as PlanarFace;
+            //PlanarFace planarFace = face as PlanarFace;
+
             //XYZ faceNormal = planarFace.FaceNormal.Normalize();
+            XYZ faceNormal = face.ComputeNormal(Helpers.GetCenterOfFace(face)).Normalize();
 
             //XYZ faceOrigin = planarFace.Origin;
-
-
-
-
+            
             BoundingBoxUV box = face.GetBoundingBox();
 
-            UV faceCenter = (box.Max + box.Min) / 2;
+            //UV faceCenter = (box.Max + box.Min) / 2;
 
             //https://forums.autodesk.com/t5/revit-api-forum/how-to-find-center-of-face/td-p/9210188
             UV faceCentere = Helpers.GetCenterOfFace(face);
@@ -66,19 +66,40 @@ namespace rvtRebars
 
             Transform trans = (selectedElement as FamilyInstance).GetTransform();
 
+            XYZ axisDirection = new XYZ(0, 0, 1); // Z-axis
+            Line axis = Line.CreateUnbound(centerFace, axisDirection);
 
-            
+            double radAngle = Math.PI - Helpers.SignedAngle(XYZ.BasisX, rotation, faceNormal);
+
             using (Transaction t = new Transaction(doc, "Section Face"))
             {
 
                 t.Start();
 
-                FamilyInstance familyInstance3 = doc.Create.NewFamilyInstance(
+                FamilyInstance sphere = doc.Create.NewFamilyInstance(
                         centerFace, // Location point
                         fs, // FamilySymbol
 
                         StructuralType.NonStructural // Specify if it's structural or non-structural
                     );
+
+                ElementTransformUtils.RotateElement(doc, sphere.Id, axis, -radAngle);
+                
+                // Create color (Red in this case)
+                Color redColor = new Color(255, 0, 0); // RGB 0-255
+
+                // Create override settings
+                OverrideGraphicSettings ogs = new OverrideGraphicSettings();
+                ogs.SetSurfaceForegroundPatternColor(redColor);
+
+                FilteredElementCollector fillCollector = new FilteredElementCollector(doc).OfClass(typeof(FillPatternElement)).WhereElementIsNotElementType();
+
+                FillPatternElement solidFill = fillCollector.Cast<FillPatternElement>().FirstOrDefault(f => f.GetFillPattern().IsSolidFill);
+
+                ogs.SetSurfaceForegroundPatternId(solidFill.Id);
+
+                doc.ActiveView.SetElementOverrides(sphere.Id, ogs);
+
                 t.Commit();
 
             }

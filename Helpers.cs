@@ -57,6 +57,13 @@ namespace rvtRebars
             totalMass += mass;
         }
 
+        public static double SignedAngle(XYZ v1, XYZ v2, XYZ normal)
+        {
+            double angle = v1.AngleTo(v2);
+            XYZ cross = v1.CrossProduct(v2);
+            double sign = Math.Sign(cross.DotProduct(normal));
+            return angle * sign; // radians, signed
+        }
 
         public static UV GetCenterOfFace(Face myFace)
         {
