@@ -48,8 +48,11 @@ namespace rvtRebars
 					
 					BoundingBoxUV box = face.GetBoundingBox();
 					
-                    UV faceCenter = (box.Max + box.Min) / 2;
+                    //UV faceCenter = (box.Max + box.Min) / 2;
                     
+					https://forums.autodesk.com/t5/revit-api-forum/how-to-find-center-of-face/td-p/9210188
+            		UV faceCenter = Helpers.GetCenterOfFace(face);
+
 					XYZ centerish = face.Evaluate(faceCenter);
                     
 					
@@ -57,11 +60,12 @@ namespace rvtRebars
 					
 	                Transform trans = (selectedElement as FamilyInstance).GetTransform();
 	                
-                    computedFaceNormal = trans.OfVector(computedFaceNormal);
+                    //computedFaceNormal = trans.OfVector(computedFaceNormal);
                     
 					//faceNormal =trans.OfVector( faceNormal);
 
-					XYZ end = trans.OfPoint(centerish) + computedFaceNormal;
+					//XYZ end = trans.OfPoint(centerish) + computedFaceNormal;
+					XYZ end =centerish + computedFaceNormal;
 
 					// Create an orthonormal basis for the section
 					XYZ xDir = computedFaceNormal.CrossProduct(XYZ.BasisZ).Normalize();
@@ -82,7 +86,8 @@ namespace rvtRebars
 	            		    
 					
 					Transform sectionTransform = Transform.Identity;
-					sectionTransform.Origin = trans.OfPoint(centerish);
+			//sectionTransform.Origin = trans.OfPoint(centerish);
+					sectionTransform.Origin = centerish;
 					sectionTransform.BasisX = xDir;
 					sectionTransform.BasisY = upFace;
 					sectionTransform.BasisZ = viewdir; // normal is Z-direction of section box

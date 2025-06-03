@@ -52,7 +52,7 @@ namespace rvtRebars
             UV faceCenter = (box.Max + box.Min) / 2;
 
             //https://forums.autodesk.com/t5/revit-api-forum/how-to-find-center-of-face/td-p/9210188
-            UV faceCentere = GetCenterOfFace(face);
+            UV faceCentere = Helpers.GetCenterOfFace(face);
 
             //XYZ centerish = face.Evaluate(faceCentere);
 
@@ -85,33 +85,7 @@ namespace rvtRebars
             return Result.Succeeded;
         }
             
-            public UV GetCenterOfFace(Face myFace)
-{
-    double uMin = double.MaxValue;
-    double uMax = double.MinValue;
-    double vMin = double.MaxValue;
-    double vMax = double.MinValue;
 
-    foreach (EdgeArray edgeLoop in myFace.EdgeLoops)
-    {
-        foreach (Edge edge in edgeLoop)
-        {
-            IList<UV> edgeUVs = edge.TessellateOnFace(myFace);
-            foreach (UV uv in edgeUVs)
-            {
-                uMin = Math.Min(uMin, uv.U);
-                uMax = Math.Max(uMax, uv.U);
-                vMin = Math.Min(vMin, uv.V);
-                vMax = Math.Max(vMax, uv.V);
-            }
-        }
-    }
-
-    // Compute center as midpoint (not size difference)
-    UV center = new UV((uMin + uMax) / 2, (vMin + vMax) / 2);
-
-    return center;
-}
 
     }
 }
