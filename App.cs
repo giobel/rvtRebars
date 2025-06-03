@@ -55,14 +55,14 @@ namespace rvtRebars
                 }
                 
                     
-                    if (AddPushButton(cogs, assemblyPath, "btnCogConcreteReo", "Combined COG", null, "rvtRebars.Resources.combination.png",
+                    if (AddPushButton(cogs, assemblyPath, "btnCogConcreteReo", "Combined\nCOG", null, "rvtRebars.Resources.combination.png",
                         "rvtRebars.ConcreteWithReoCOG", "Refer to documentation") == false)
                 {
                     MessageBox.Show("Failed to add combined cog", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
 
-                    if (AddPushButton(cogs, assemblyPath, "btnCogConcrete", "Segment COG", null, "rvtRebars.Resources.concrete.png", 
+                    if (AddPushButton(cogs, assemblyPath, "btnCogConcrete", "Segment\nCOG", null, "rvtRebars.Resources.concrete.png", 
                     "rvtRebars.ConcreteCOG", "Calculates the centroid of the selected concrete element (must be a family instance, must have sphere family in the model)") == false)
                     {
                         MessageBox.Show("Failed to add rebars cog", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -77,7 +77,7 @@ namespace rvtRebars
                 }
 
 
-                    if (AddPushButton(cogs, assemblyPath, "btnCogRebarsbyKg", "Rebars COG\nby kg/m", null, "rvtRebars.Resources.cogRebars.png", 
+                    if (AddPushButton(cogs, assemblyPath, "btnCogRebarsbyKg", "Rebars COG\nby kg/m", null, "rvtRebars.Resources.bars.png", 
                     "rvtRebars.GetRebarsCOGbyKgm", "Refer to documentation") == false)
                     {
                         MessageBox.Show("Failed to add rebars cog", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -122,13 +122,13 @@ namespace rvtRebars
 
                     RibbonPanel utilities = GetSetRibbonPanel(a, tabName, "Utilities");
                     
-                    if (AddPushButton(utilities,assemblyPath, "btnFaceCenter", "Face Center", null, "rvtRebars.Resources.focus.png", 
+                    if (AddPushButton(utilities,assemblyPath, "btnFaceCenter", "Face\nCentre", null, "rvtRebars.Resources.focus.png", 
                     "rvtRebars.FaceCenter", "Center of Face") == false)
                     {
                         MessageBox.Show("Failed to add button zoom", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     
-                    if (AddPushButton(utilities,assemblyPath, "btnProject", "Project to Face", null, "rvtRebars.Resources.sling.png", 
+                    if (AddPushButton(utilities,assemblyPath, "btnProject", "Project\nto Face", null, "rvtRebars.Resources.sling.png", 
                     "rvtRebars.ProjectToFace", "Center of Face") == false)
                     {
                         MessageBox.Show("Failed to add button zoom", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -164,14 +164,14 @@ namespace rvtRebars
                         MessageBox.Show("Failed to add button select", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
 
-                    if (AddPushButton(utilities,assemblyPath, "btnExport", "Export Sheets", null, "rvtRebars.Resources.exportExcel.png", 
+                    if (AddPushButton(utilities,assemblyPath, "btnExport", "Export\nSheets", null, "rvtRebars.Resources.exportExcel.png", 
                     "rvtRebars.ExportSheets", "Refer to documentation") == false)
                     {
                         MessageBox.Show("Failed to add button export sheets", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     
                     
-                    if (AddPushButton(utilities,assemblyPath, "btnExportSchedules", "Export Schedules", null, "rvtRebars.Resources.exportExcel.png", 
+                    if (AddPushButton(utilities,assemblyPath, "btnExportSchedules", "Export\nSchedules", null, "rvtRebars.Resources.exportExcel.png", 
                     "rvtRebars.ExportSchedules", "Export all schedules on segment shop drawing indexes") == false)
                     {
                         MessageBox.Show("Failed to add button export sheets", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

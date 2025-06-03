@@ -50,7 +50,7 @@ namespace rvtRebars
 					
                     //UV faceCenter = (box.Max + box.Min) / 2;
                     
-					https://forums.autodesk.com/t5/revit-api-forum/how-to-find-center-of-face/td-p/9210188
+					//https://forums.autodesk.com/t5/revit-api-forum/how-to-find-center-of-face/td-p/9210188
             		UV faceCenter = Helpers.GetCenterOfFace(face);
 
 					XYZ centerish = face.Evaluate(faceCenter);
