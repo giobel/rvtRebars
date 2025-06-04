@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("rvtRebars")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0c1f522bae86aac12148aeb6a54f6d1fd755fdbf")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0172bbfeae68a1fb0e35e82e398d2bb77a76bf64")]
 [assembly: System.Reflection.AssemblyProductAttribute("rvtRebars")]
 [assembly: System.Reflection.AssemblyTitleAttribute("rvtRebars")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
