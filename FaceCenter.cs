@@ -73,7 +73,7 @@ namespace rvtRebars
             Transform trans = (selectedElement as FamilyInstance).GetTransform();
 
             XYZ axisDirection = new XYZ(0, 0, 1); // Z-axis
-            Line axis = Line.CreateUnbound(centerFace, axisDirection);
+            
 
             double radAngle = Math.PI - Helpers.SignedAngle(XYZ.BasisX, rotation, faceNormal);
 
@@ -85,39 +85,34 @@ namespace rvtRebars
                 double dist1 = centerFace.DistanceTo(XYZ.Zero);
                 double dist2 = trans.OfPoint(centerFace).DistanceTo(XYZ.Zero);
 
-                TaskDialog.Show("R", $"{dist1} vs {dist2}");
+                //TaskDialog.Show("R", $"{dist1} vs {dist2}");
 
-               
 
+                FamilyInstance sphere = null;
 
                 if (dist1 > dist2)
                 {
-                    FamilyInstance sphere = doc.Create.NewFamilyInstance(
+                     sphere = doc.Create.NewFamilyInstance(
                         centerFace, // Location point
                         fs, // FamilySymbol
                         StructuralType.NonStructural // Specify if it's structural or non-structural
                     );
+                    Line axis = Line.CreateUnbound(centerFace, axisDirection);
+                    ElementTransformUtils.RotateElement(doc, sphere.Id, axis, -radAngle);
                 }
                 else
                 {
-                    FamilyInstance sphere1 = doc.Create.NewFamilyInstance(
+                    sphere = doc.Create.NewFamilyInstance(
                         trans.OfPoint(centerFace), // Location point
                         fs, // FamilySymbol
-
                         StructuralType.NonStructural // Specify if it's structural or non-structural
                     );
+
+                    Line axis = Line.CreateUnbound(trans.OfPoint(centerFace), axisDirection);
+                    ElementTransformUtils.RotateElement(doc, sphere.Id, axis, -radAngle);
+
                 }
 
-
-
-                    
-
-
-
-
-
-                //ElementTransformUtils.RotateElement(doc, sphere.Id, axis, -radAngle);
-                
                 // Create color (Red in this case)
                 Color redColor = new Color(255, 0, 0); // RGB 0-255
 
@@ -131,7 +126,7 @@ namespace rvtRebars
 
                 ogs.SetSurfaceForegroundPatternId(solidFill.Id);
 
-                //doc.ActiveView.SetElementOverrides(sphere.Id, ogs);
+                doc.ActiveView.SetElementOverrides(sphere.Id, ogs);
 
                 t.Commit();
 

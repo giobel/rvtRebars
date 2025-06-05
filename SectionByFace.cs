@@ -55,17 +55,28 @@ namespace rvtRebars
 
 					XYZ centerish = face.Evaluate(faceCenter);
                     
+
+
 					
 					XYZ computedFaceNormal = face.ComputeNormal(faceCenter).Normalize();
 					
 	                Transform trans = (selectedElement as FamilyInstance).GetTransform();
 	                
-                    //computedFaceNormal = trans.OfVector(computedFaceNormal);
-                    
-					//faceNormal =trans.OfVector( faceNormal);
+					double dist1 = centerish.DistanceTo(XYZ.Zero);
+                	double dist2 = trans.OfPoint(centerish).DistanceTo(XYZ.Zero);
 
-					//XYZ end = trans.OfPoint(centerish) + computedFaceNormal;
-					XYZ end =centerish + computedFaceNormal;
+			XYZ end = centerish + computedFaceNormal;
+
+			if (dist1 < dist2)
+			{
+				computedFaceNormal = trans.OfVector(computedFaceNormal);
+				faceNormal = trans.OfVector(faceNormal);
+				end = trans.OfPoint(centerish) + computedFaceNormal;
+			}	
+					
+
+			
+			
 
 					// Create an orthonormal basis for the section
 					XYZ xDir = computedFaceNormal.CrossProduct(XYZ.BasisZ).Normalize();
@@ -86,9 +97,20 @@ namespace rvtRebars
 	            		    
 					
 					Transform sectionTransform = Transform.Identity;
-			//sectionTransform.Origin = trans.OfPoint(centerish);
-					sectionTransform.Origin = centerish;
-					sectionTransform.BasisX = xDir;
+					
+
+
+			if (dist1 > dist2)
+			{
+				sectionTransform.Origin = centerish;
+			}
+			else
+			{
+				sectionTransform.Origin = trans.OfPoint(centerish);	
+			}
+
+
+			sectionTransform.BasisX = xDir;
 					sectionTransform.BasisY = upFace;
 					sectionTransform.BasisZ = viewdir; // normal is Z-direction of section box
 					
