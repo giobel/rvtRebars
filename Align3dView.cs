@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autodesk.Revit.ApplicationServices;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.Structure;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
 
@@ -14,7 +16,7 @@ using Autodesk.Revit.UI.Selection;
 namespace rvtRebars
 {
 	[Transaction(TransactionMode.Manual)]
-	public class SectionByFace : IExternalCommand
+	public class Align3dView : IExternalCommand
 	{
 		public Result Execute(
 		  ExternalCommandData commandData,
@@ -32,6 +34,12 @@ namespace rvtRebars
 			Element selectedElement = doc.GetElement(faceRef);
 			FamilyInstance fa = selectedElement as FamilyInstance;
 
+			BoundingBoxXYZ elementBbox = fa.get_BoundingBox(doc.ActiveView);
+
+			double height = elementBbox.Max.Z - elementBbox.Min.Z;
+
+			//TaskDialog.Show("R", height.ToString());
+
 			GeometryObject geoObj = doc.GetElement(faceRef.ElementId).GetGeometryObjectFromReference(faceRef);
 			Face face = geoObj as Face;
 
@@ -41,12 +49,6 @@ namespace rvtRebars
 			PlanarFace planarFace = face as PlanarFace;
 			XYZ faceNormal = planarFace.FaceNormal.Normalize();
 
-			XYZ faceOrigin = planarFace.Origin;
-
-
-
-
-			BoundingBoxUV box = face.GetBoundingBox();
 
 			//UV faceCenter = (box.Max + box.Min) / 2;
 
@@ -96,31 +98,21 @@ namespace rvtRebars
 			XYZ viewdir = xDir.CrossProduct(upFace);
 
 
-			Transform sectionTransform = Transform.Identity;
+			XYZ boxCenter = XYZ.Zero;
 
 
 
 			if (dist1 > dist2)
 			{
-				sectionTransform.Origin = centerish;
+				boxCenter = centerish;
 			}
 			else
 			{
-				sectionTransform.Origin = trans.OfPoint(centerish);
+				boxCenter = trans.OfPoint(centerish);
 			}
 
 
-			sectionTransform.BasisX = xDir;
-			sectionTransform.BasisY = upFace;
-			sectionTransform.BasisZ = viewdir; // normal is Z-direction of section box
 
-			// Define the section box size (in feet)
-			BoundingBoxXYZ sectionBox = new BoundingBoxXYZ();
-			sectionBox.Transform = sectionTransform;
-
-			//Max/Min X = Section line Length, Max/Min Y is the height of the section box, Max/Min Z far clip          
-
-			BoundingBoxXYZ elementBbox = fa.get_BoundingBox(doc.ActiveView);
 
 
 
@@ -128,46 +120,70 @@ namespace rvtRebars
 			double width = 8000 / 304.8;
 
 			//double elementMaxZ = elementBbox.Max.Z;
-			double height = 8000 / 304.8;
+			//double height = 8000 / 304.8;
 
 
-
-			sectionBox.Min = new XYZ(-width / 2, -height / 2, 0); // 10' x 10' section, 1' depth
-			sectionBox.Max = new XYZ(width / 2, height / 2, 500 / 304.8);
-
-			// Get a ViewFamilyType for a section
-			ViewFamilyType sectionViewType = new FilteredElementCollector(doc)
-				.OfClass(typeof(ViewFamilyType))
-				.Cast<ViewFamilyType>()
-				.FirstOrDefault(x => x.ViewFamily == ViewFamily.Section);
 
 			using (Transaction t = new Transaction(doc, "Section Face"))
 			{
 
 				t.Start();
 
+														
+								FamilyInstance familyInstance2 = doc.Create.NewFamilyInstance(
+						                boxCenter, // Location point
+						                fs, // FamilySymbol
+						                
+						                StructuralType.NonStructural // Specify if it's structural or non-structural
+						            );
 
-				//						
-				//				FamilyInstance familyInstance2 = doc.Create.NewFamilyInstance(
-				//		                trans.OfPoint(centerish), // Location point
-				//		                fs, // FamilySymbol
-				//		                
-				//		                StructuralType.NonStructural // Specify if it's structural or non-structural
-				//		            );
+				
+				    
 
 
+				Transform transf3D = Transform.Identity;
+				transf3D.Origin = boxCenter;
+				transf3D.BasisX = xDir;
+				transf3D.BasisY = upFace;
+				transf3D.BasisZ = viewdir; // normal is Z-direction of section box
 
-				XYZ p1 = sectionTransform.Origin;
-				XYZ p2 = p1 + xDir * 2;
-				XYZ p3 = p1 + yDir * 3;
 
-				// Create the section view
-				ViewSection sectionView = ViewSection.CreateSection(doc, sectionViewType.Id, sectionBox);
+				
 
+					Plane planeXY = Plane.CreateByNormalAndOrigin(upFace, transf3D.Origin);
+			Plane planeXZ = Plane.CreateByNormalAndOrigin(viewdir, transf3D.Origin);
+
+
+			doc.Create.NewModelCurve(
+				Line.CreateBound(transf3D.Origin, transf3D.Origin+ upFace.Normalize()*(5000/304.8)),
+					SketchPlane.Create(doc, planeXZ)
+				);
+
+						doc.Create.NewModelCurve(
+				Line.CreateBound(transf3D.Origin, transf3D.Origin+ upFace.Normalize()*(-5000/304.8)),
+					SketchPlane.Create(doc, planeXZ)
+				);
+
+
+				BoundingBoxXYZ sectionBox3D = new BoundingBoxXYZ();
+				sectionBox3D.Transform = transf3D;
+
+
+				sectionBox3D.Min = new XYZ(-width / 2, -100/304.8, -5000/304.8); // height is already in feet
+				sectionBox3D.Max = new XYZ(width / 2, 3000/304.8, 5000/304.8);
+
+				View3D current3DView = doc.ActiveView as View3D;
+
+				current3DView.SetSectionBox(sectionBox3D);
+
+				//https://sharpbim.hashnode.dev/aligning-3d-views
+				var ori = new ViewOrientation3D(transf3D.Origin, upFace, viewdir);
+
+				current3DView.SetOrientation(ori);
 
 				t.Commit();
 
-				uidoc.ActiveView = sectionView;
+				//uidoc.ActiveView = sectionView;
 
 
 
@@ -176,7 +192,7 @@ namespace rvtRebars
 			return Result.Succeeded;
 		}
 			
-		
+
 
     }
 }

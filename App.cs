@@ -131,17 +131,23 @@ namespace rvtRebars
                     if (AddPushButton(utilities,assemblyPath, "btnProject", "Project\nto Face", null, "rvtRebars.Resources.sling.png", 
                     "rvtRebars.ProjectToFace", "Center of Face") == false)
                     {
-                        MessageBox.Show("Failed to add button zoom", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Failed to add button center of face", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     
-                    if (AddPushButton(utilities, assemblyPath, "btnFaceSection", "Face Section", null, "rvtRebars.Resources.slice_icon.png",
-        "rvtRebars.SectionByFace", "Section aligned to selected face") == false)
+                if (AddPushButton(utilities, assemblyPath, "btnFaceSection", "Face Section", null, "rvtRebars.Resources.slice_icon.png",
+                    "rvtRebars.SectionByFace", "Section aligned to selected face") == false)
                 {
-                    MessageBox.Show("Failed to add button zoom", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Failed to add button face section", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                
+                if (AddPushButton(utilities, assemblyPath, "btnAlign3D", "Align 3D View", null, "rvtRebars.Resources.slice_icon.png",
+                    "rvtRebars.Align3dView", "Align 3d view to face") == false)
+                {
+                    MessageBox.Show("Failed to add button align", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                     
                     if (AddPushButton(utilities, assemblyPath, "btnSelectBars", "Select Rebars", null, "rvtRebars.Resources.selectArea.png",
-            "rvtRebars.SelectRebars", "Select rebars only (works inside groups too)") == false)
+    "rvtRebars.SelectRebars", "Select rebars only (works inside groups too)") == false)
                 {
                     MessageBox.Show("Failed to add button zoom", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
