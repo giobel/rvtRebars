@@ -27,17 +27,18 @@ namespace rvtRebars
             Application app = uiapp.Application;
             Document doc = uidoc.Document;
 
-            Dictionary<string, double> bbarWeight = new Dictionary<string, double>();
-			
-			bbarWeight.Add("N10",0.66);
-			bbarWeight.Add("N12",0.928);
-			bbarWeight.Add("N16",1.649);
-			bbarWeight.Add("N20",2.577);
-			bbarWeight.Add("N24",3.711);
-			bbarWeight.Add("N28",5.051);
-			bbarWeight.Add("N32",6.597);
-			bbarWeight.Add("N36",8.35);
-			bbarWeight.Add("N40",10.309);
+            Dictionary<string, double> bbarWeight = new Dictionary<string, double>
+            {
+                { "N10", 0.66 },
+                { "N12", 0.928 },
+                { "N16", 1.649 },
+                { "N20", 2.577 },
+                { "N24", 3.711 },
+                { "N28", 5.051 },
+                { "N32", 6.597 },
+                { "N36", 8.35 },
+                { "N40", 10.309 }
+            };
 			
 			IList<Element> rebars = new FilteredElementCollector(doc, doc.ActiveView.Id).OfCategory(BuiltInCategory.OST_Rebar).WhereElementIsNotElementType().ToElements();
 			

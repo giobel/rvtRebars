@@ -8,14 +8,67 @@ namespace rvtRebars
 {
     class Helpers
     {
-        
- public static void ProcessGeometryObject(
-            GeometryObject obj,
-            double density,
-            ref double cogX,
-            ref double cogY,
-            ref double cogZ,
-            ref double totalMass)
+
+
+        public static Plane GetRebarSketchPlane(Rebar rebar)
+        {
+            // Get the centerline curves of the rebar
+            IList<Curve> curves = rebar.GetCenterlineCurves(
+                true,  // useGeometry
+                false, // forVisualization
+                false, // include hooks
+                MultiplanarOption.IncludeOnlyPlanarCurves,
+                0      // specific bar position (optional)
+            );
+
+            if (curves == null || curves.Count == 0)
+                return null;
+
+            // Use the first curve to define the plane
+            Curve firstCurve = curves[0];
+
+            // Get start and end point
+            XYZ p0 = firstCurve.GetEndPoint(0);
+            XYZ p1 = firstCurve.GetEndPoint(1);
+            XYZ tangent = (p1 - p0).Normalize();
+
+            // Try to get a second non-colinear curve for direction
+            XYZ normal = null;
+            for (int i = 1; i < curves.Count; i++)
+            {
+                XYZ pA = curves[i].GetEndPoint(0);
+                XYZ pB = curves[i].GetEndPoint(1);
+                XYZ dir = (pB - pA).Normalize();
+
+                normal = tangent.CrossProduct(dir);
+                if (normal.GetLength() > 1e-6)
+                    break;
+            }
+
+            if (normal == null || normal.IsZeroLength())
+            {
+                // Fallback: try Rebar's normal if it's a single-plane rebar
+                //8normal = rebar.Normal;
+            }
+
+            // Ensure normal is valid
+            if (normal == null || normal.IsZeroLength())
+                return null;
+
+            // Plane origin is at p0, X = tangent, Y = tangent.Cross(normal), Normal = normal
+            XYZ xDir = tangent;
+            XYZ yDir = normal.CrossProduct(tangent);
+            return Plane.CreateByOriginAndBasis(p0, xDir, yDir);
+        }
+
+
+        public static void ProcessGeometryObject(
+                                 GeometryObject obj,
+                                 double density,
+                                 ref double cogX,
+                                 ref double cogY,
+                                 ref double cogZ,
+                                 ref double totalMass)
         {
             Solid solid = obj as Solid;
             if (solid != null && solid.Volume > 0)
