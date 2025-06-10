@@ -151,7 +151,7 @@ namespace rvtRebars
 				
 
 					Plane planeXY = Plane.CreateByNormalAndOrigin(upFace, transf3D.Origin);
-			Plane planeXZ = Plane.CreateByNormalAndOrigin(viewdir, transf3D.Origin);
+					Plane planeXZ = Plane.CreateByNormalAndOrigin(viewdir, transf3D.Origin);
 
 
 			doc.Create.NewModelCurve(
