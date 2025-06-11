@@ -122,6 +122,13 @@ namespace rvtRebars
 
                 RibbonPanel utilities = GetSetRibbonPanel(a, tabName, "Utilities");
 
+                if (AddPushButton(utilities, assemblyPath, "btnCopySections", "Create Sections", null, "rvtRebars.Resources.duplicate.png",
+                "rvtRebars.CopySections", "Create a section per slice layer") == false)
+                {
+                    MessageBox.Show("Failed to add button zoom", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+
                 if (AddPushButton(utilities, assemblyPath, "btnFaceCenter", "Face\nCentre", null, "rvtRebars.Resources.focus.png",
                 "rvtRebars.FaceCenter", "Center of Face") == false)
                 {
@@ -196,20 +203,20 @@ namespace rvtRebars
 
                 RibbonPanel colors = GetSetRibbonPanel(a, tabName, "Colorize");
 
-                if (AddPushButton(utilities, assemblyPath, "btnColorByUID", "Colour\nby UID", null, "rvtRebars.Resources.paint.png",
-                "rvtRebars.ColoryByUID", "Override colours of rebars in active view by UID parameter") == false)
+                if (AddPushButton(colors, assemblyPath, "btnColorByUID", "Colour\nby UID", null, "rvtRebars.Resources.paint.png",
+                "rvtRebars.ColorByUID", "Override colours of rebars in active view by UID parameter") == false)
                 {
                     MessageBox.Show("Failed to add button export sheets", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
-                if (AddPushButton(utilities, assemblyPath, "btnColorBySlice", "Colour\nby Slice No", null, "rvtRebars.Resources.paint.png",
-"rvtRebars.ColoryBySlice", "Override colours of rebars in active view by Slice Number") == false)
+                if (AddPushButton(colors, assemblyPath, "btnColorBySlice", "Colour\nby Slice No", null, "rvtRebars.Resources.paint.png",
+"rvtRebars.ColorBySlice", "Override colours of rebars in active view by Slice Number") == false)
                 {
                     MessageBox.Show("Failed to add button export sheets", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
-                if (AddPushButton(utilities, assemblyPath, "btnColorByLayer", "Colour\nby Position", null, "rvtRebars.Resources.paint.png",
-"rvtRebars.ColoryByLayer", "Override colours of rebars in active view by Position parameter") == false)
+                if (AddPushButton(colors, assemblyPath, "btnColorByLayer", "Colour\nby Position", null, "rvtRebars.Resources.paint.png",
+"rvtRebars.ColorByLayer", "Override colours of rebars in active view by Position parameter") == false)
                 {
                     MessageBox.Show("Failed to add button export sheets", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
