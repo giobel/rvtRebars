@@ -65,6 +65,8 @@
     <EmbeddedResource Include="Resources\rebars.png" />
     <EmbeddedResource Include="Resources\sling.png" />
     <EmbeddedResource Include="Resources\bars.png" />
+    <EmbeddedResource Include="Resources\paint.png" />
+
 
 
 
