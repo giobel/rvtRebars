@@ -58,11 +58,11 @@ namespace rvtRebars
 
 				string diameterName = "N" + Math.Round(diameter, 0).ToString();
 
-				double length = UnitUtils.ConvertFromInternalUnits(element.LookupParameter("Total Bar Length").AsDouble(), UnitTypeId.Meters);
+				//double length = UnitUtils.ConvertFromInternalUnits(element.LookupParameter("Total Bar Length").AsDouble(), UnitTypeId.Meters);
 
-				double rebarWeight = bbarWeight[diameterName] * length;
+				//double rebarWeight = bbarWeight[diameterName] * length;
 
-				List<Solid> sourceSolids = Helpers.GetRebarSolid(doc, element);
+				//List<Solid> sourceSolids = Helpers.GetRebarSolid(doc, element);
 
 				//BoundingBoxXYZ bbox = element.get_BoundingBox(doc.ActiveView);
 
@@ -73,49 +73,78 @@ namespace rvtRebars
 				//XYZ bboxCenter = (pt3 + pt1)/2;
 
 				//if (sourceSolids.Count == 1){
+ 				Rebar bar = element as Rebar;
+								IList<Curve> rebarCls = bar.GetCenterlineCurves(
+											    true, // adjustForSelfIntersection
+											    false, // suppress hooks
+											    false, // suppress bends
+											    MultiplanarOption.IncludeAllMultiplanarCurves, // or .CurrentPlaneOnly
+											    0); // if multiplar, index of the plane
 
-				foreach (var solidBar in sourceSolids)
+
+				foreach (Curve curve in rebarCls)
 				{
+					XYZ midPoint = curve.Evaluate(0.5, true);
 
-
-					try
-					{
-
-						XYZ bboxCenter = solidBar.ComputeCentroid();
-
-						//	           	doc.Create.NewFamilyInstance(
-						//		                bboxCenter, // Location point
-						//		                fs, // FamilySymbol
-						//		                
-						//		                StructuralType.NonStructural // Specify if it's structural or non-structural
-						//		            );
-
-						//double volume = element.LookupParameter("Reinforcement Volume").AsDouble();
-						double volume = solidBar.Volume;
-
-						//double convertedVolume = UnitUtils.ConvertFromInternalUnits(volume, UnitTypeId.CubicMeters);
-						//double density = 7.850;
-						//double tonnes = convertedVolume*density;
-						double tonnes = rebarWeight;
-
+						double tonnes = curve.Length * bbarWeight[diameterName];
 						totalMass += tonnes;
 
-						xWeightedSum += tonnes * bboxCenter.X;
-						yWeightedSum += tonnes * bboxCenter.Y;
-						zWeightedSum += tonnes * bboxCenter.Z;
-
-
-					}
-
-					catch
-					{
-
-						//TaskDialog.Show("R", element.Id.ToString());
-
-						throw new Exception("Error");
-					}
+						xWeightedSum += tonnes * midPoint.X;
+						yWeightedSum += tonnes * midPoint.Y;
+						zWeightedSum += tonnes * midPoint.Z;
 
 				}
+
+
+				// foreach (var solidBar in sourceSolids)
+				// {
+
+
+				// 	try
+				// 	{
+
+				// 		XYZ bboxCenter = solidBar.ComputeCentroid();
+
+
+
+				// 		// doc.Create.NewFamilyInstance(
+				// 		//         bboxCenter, // Location point
+				// 		//         fs, // FamilySymbol
+
+				// 		//         StructuralType.NonStructural // Specify if it's structural or non-structural
+				// 		//     );
+
+				// 		//double volume = element.LookupParameter("Reinforcement Volume").AsDouble();
+
+				// 		//double volume = solidBar.Volume;
+
+
+				// 		//double convertedVolume = UnitUtils.ConvertFromInternalUnits(volume, UnitTypeId.CubicMeters);
+				// 		//double density = 7.850;
+				// 		//double tonnes = convertedVolume*density;
+
+
+				// 		//weight of current bar!!!
+				// 		double tonnes = rebarWeight;
+
+				// 		totalMass += tonnes;
+
+				// 		xWeightedSum += tonnes * bboxCenter.X;
+				// 		yWeightedSum += tonnes * bboxCenter.Y;
+				// 		zWeightedSum += tonnes * bboxCenter.Z;
+
+
+				// 	}
+
+				// 	catch
+				// 	{
+
+				// 		//TaskDialog.Show("R", element.Id.ToString());
+
+				// 		throw new Exception("Error");
+				// 	}
+
+				// }
 				//	           	}
 				//
 				//	           	else{

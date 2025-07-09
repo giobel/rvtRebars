@@ -68,6 +68,10 @@
     <EmbeddedResource Include="Resources\paint.png" />
     <EmbeddedResource Include="Resources\duplicate.png" />
 
+  <EmbeddedResource Include="Resources\revXcelExport32.png"/>
+  <EmbeddedResource Include="Resources\revXcelExport48.png"/>
+  <EmbeddedResource Include="Resources\revXcelImport32.png"/>
+  <EmbeddedResource Include="Resources\revXcelImport48.png"/>
 
 
 
@@ -88,9 +92,9 @@
   
 </ItemGroup>  
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+  <!-- <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(AppData)\Autodesk\Revit\Addins\2024" />
-  </Target>
+  </Target> -->
   
 
 </Project>

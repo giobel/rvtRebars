@@ -54,6 +54,8 @@ namespace rvtRebars
 
                     segIds = Regex.Replace(segIds, @"\r\n?|\n", ", ");
 
+                    segIds = segIds.Replace(",,", ",").Replace(", ,", ",").Replace(" ,", ",");
+
                     string docCode = vs.LookupParameter("DOC CODE")?.AsString() ?? "";
                     string currentRev = vs.LookupParameter("Current Revision")?.AsValueString() ?? "";
 

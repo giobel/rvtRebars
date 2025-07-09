@@ -186,6 +186,43 @@ namespace rvtRebars
             return rebarSolids;
 
         }
+
+        
+
+public static List<Curve> GetRebarCenterline(Rebar rebar)
+{
+    // Set up options to include centerline curves
+    Options geomOptions = new Options
+    {
+        ComputeReferences = true,
+        IncludeNonVisibleObjects = false,
+        DetailLevel = ViewDetailLevel.Fine
+    };
+
+    // Get geometry
+    GeometryElement geomElem = rebar.get_Geometry(geomOptions);
+
+    List<Curve> centerlineCurves = new List<Curve>();
+
+    foreach (GeometryObject obj in geomElem)
+    {
+        if (obj is GeometryInstance geomInstance)
+        {
+            GeometryElement instGeomElem = geomInstance.GetInstanceGeometry();
+
+            foreach (GeometryObject instObj in instGeomElem)
+            {
+                if (instObj is Curve curve)
+                {
+                    centerlineCurves.Add(curve);
+                }
+            }
+        }
+    }
+
+    return centerlineCurves;
+}
+
     
             public static FamilySymbol GetFamilySymbolByName(Document doc, string familyName, string symbolName)
         {
