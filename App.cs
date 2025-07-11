@@ -48,14 +48,6 @@ namespace rvtRebars
                 string assemblyPath = Assembly.GetExecutingAssembly().Location;
 
 
-                AddPushButton(cogs, assemblyPath, "btnReoWeight1", "Reo Weight", null, "rvtRebars.Resources.revXcelExport32.png","rvtRebars.ReoWeight", "Refer to documentation");
-
-                AddPushButton(cogs, assemblyPath, "btnReoWeight2", "Reo Weight", null, "rvtRebars.Resources.revXcelExport48.png","rvtRebars.ReoWeight", "Refer to documentation");
-
-                AddPushButton(cogs, assemblyPath, "btnReoWeight3", "Reo Weight", null, "rvtRebars.Resources.revXcelImport32.png","rvtRebars.ReoWeight", "Refer to documentation");
-
-                AddPushButton(cogs, assemblyPath, "btnReoWeight4", "Reo Weight", null, "rvtRebars.Resources.revXcelImport48.png","rvtRebars.ReoWeight", "Refer to documentation");              
-                
 
                 if (AddPushButton(cogs, assemblyPath, "btnReoWeight", "Reo Weight", null, "rvtRebars.Resources.scale.png",
                         "rvtRebars.ReoWeight", "Refer to documentation") == false)

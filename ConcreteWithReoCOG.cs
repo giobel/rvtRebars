@@ -108,7 +108,8 @@ namespace rvtRebars
 
                     #endregion
 
-
+                    TaskDialog.Show("r", totalMass.ToString());
+                    
                     #region REINFORCEMENT
 
                     foreach (Reference barRef in selectedReoRef)
@@ -121,52 +122,51 @@ namespace rvtRebars
 
                         double length = UnitUtils.ConvertFromInternalUnits(barElement.LookupParameter("Total Bar Length").AsDouble(), UnitTypeId.Meters);
 
-                        double rebarWeight = bbarWeight[diameterName] * length;
+                        //double rebarWeight = bbarWeight[diameterName] * length;
+
+
+                        Rebar bar = barElement as Rebar;
+                        IList<Curve> rebarCls = bar.GetCenterlineCurves(
+                                        true, // adjustForSelfIntersection
+                                        false, // suppress hooks
+                                        false, // suppress bends
+                                        MultiplanarOption.IncludeAllMultiplanarCurves, // or .CurrentPlaneOnly
+                                        0); // if multiplar, index of the plane
 
                         List<Solid> sourceSolids = Helpers.GetRebarSolid(doc, barElement);
 
-                        foreach (var solidBar in sourceSolids)
+
+                        for (int i = 0; i < rebarCls.Count; i++)
                         {
+                            Curve curve = rebarCls[i];
 
+                            if (curve == null) continue;
 
-                            try
-                            {
+                            // Calculate the weight of the current rebar segment
+                            
+                            double rebarWeight =  UnitUtils.ConvertFromInternalUnits(curve.Length, UnitTypeId.Meters) * bbarWeight[diameterName];
 
-                                XYZ bboxCenter = solidBar.ComputeCentroid();
+                            XYZ midPoint = curve.Evaluate(0.5, true);
 
+                           
+                            totalMass += rebarWeight;
 
+                            cogX += rebarWeight * midPoint.X;
+                            cogY += rebarWeight * midPoint.Y;
+                            cogZ += rebarWeight * midPoint.Z;
 
-                                totalMass += rebarWeight;
+                            double rebarVol = rebarWeight / rebarDensity;
+                            double rebarAsConcreteWeight = rebarVol * concreteDensity;
+                            totalMass -= rebarAsConcreteWeight;
 
-                                cogX += rebarWeight * bboxCenter.X;
-                                cogY += rebarWeight * bboxCenter.Y;
-                                cogZ += rebarWeight * bboxCenter.Z;
-
-                                //subtract the volume of reinforcement from the volume of concrete
-
-                                //volume of reinforcement (different from volume of bar in Revit)
-                                //volume of bar in revit is A x L --> does not take into account bar deformation
-                                double rebarVol = rebarWeight / rebarDensity;
-
-                                //subtract volume of rebar as concrete from total segment volume
-                                double rebarAsConcreteWeight = rebarVol * concreteDensity;
-                                totalMass -= rebarAsConcreteWeight;
-
-                                //subtract the centroid of the rebar as concrete from the cog calculation
-                                cogX -= rebarAsConcreteWeight * bboxCenter.X;
-                                cogY -= rebarAsConcreteWeight * bboxCenter.Y;
-                                cogZ -= rebarAsConcreteWeight * bboxCenter.Z;
- 
-
-                            }
-
-                            catch
-                            {
-
-                                //throw new Exception("Error");
-                            }
-
+                            //subtract the centroid of the rebar as concrete from the cog calculation
+                            cogX -= rebarAsConcreteWeight * midPoint.X;
+                            cogY -= rebarAsConcreteWeight * midPoint.Y;
+                            cogZ -= rebarAsConcreteWeight * midPoint.Z;
                         }
+
+
+
                     }
 
 

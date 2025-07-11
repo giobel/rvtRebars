@@ -86,7 +86,7 @@ namespace rvtRebars
 				{
 					XYZ midPoint = curve.Evaluate(0.5, true);
 
-						double tonnes = curve.Length * bbarWeight[diameterName];
+						double tonnes =  UnitUtils.ConvertFromInternalUnits(curve.Length, UnitTypeId.Meters) * bbarWeight[diameterName];
 						totalMass += tonnes;
 
 						xWeightedSum += tonnes * midPoint.X;
@@ -187,10 +187,11 @@ namespace rvtRebars
 			Transform ttr = pl.GetTotalTransform().Inverse;
 			cogPt = ttr.OfPoint(cogPt);
 
-			TaskDialog.Show("R", String.Format("Center of Gravity: X = {0}, Y = {1}, Z = {2}",
+			TaskDialog.Show("R", String.Format("Center of Gravity: X = {0}, Y = {1}, Z = {2}\nTotal Weight: {3}",
 											   UnitUtils.ConvertFromInternalUnits(cogPt.X, UnitTypeId.Meters),
 											   UnitUtils.ConvertFromInternalUnits(cogPt.Y, UnitTypeId.Meters),
-											   UnitUtils.ConvertFromInternalUnits(cogPt.Z, UnitTypeId.Meters)
+											   UnitUtils.ConvertFromInternalUnits(cogPt.Z, UnitTypeId.Meters),
+											   totalMass
 											  )
 											 );
 
