@@ -12,19 +12,23 @@
 
     <StackPanel Margin="10">
         <TextBlock Text="Select 3D Views to Export:" FontWeight="Bold" Margin="0,0,0,10"/>
+
+
+    <Border BorderBrush="CadetBlue" BorderThickness="1" Padding="0">
         <ScrollViewer VerticalScrollBarVisibility="Auto" Height="250">
             <ItemsControl Name="ViewsList">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected, Mode=TwoWay}" Margin="2"/>
+                            <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected, Mode=TwoWay}" Margin="2"/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </ScrollViewer>
+    </Border>
 
 
-        <StackPanel Margin="0">
-            <TextBlock Text="Select or paste the output folder path:" Margin="0,0,0,5"/>
+        <StackPanel Margin="0,10,0,0">
+            <TextBlock Text="Type or browse the output folder path:" FontWeight="Bold" Margin="0,0,0,5"/>
 
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -42,7 +46,7 @@
                         Width="120"
                         Height="25"
                         Grid.Column="1">
-                    Browse Folder
+                    Browse
                 </Button>
             </Grid>
         </StackPanel>
