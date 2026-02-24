@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Windows.Threading;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using WindowsAPICodePack.Dialogs;
 
 namespace rvtRebars
 {
@@ -102,33 +103,36 @@ private bool FilterViews(object obj)
 
     return false;
 }
-
+private void btnClearFilter_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+{
+    txtFilter.Clear();
+    txtFilter.Focus();
+}
 private void txtFilter_TextChanged(object sender, TextChangedEventArgs e)
 {
+    btnClearFilter.Visibility =
+        string.IsNullOrWhiteSpace(txtFilter.Text)
+        ? System.Windows.Visibility.Collapsed
+        : System.Windows.Visibility.Visible;
+
     _filterTimer.Stop();
     _filterTimer.Start();
 }
+private void btnBrowse_Click(object sender, RoutedEventArgs e)
+{
+    var dlg = new CommonOpenFileDialog()
+    {
+        Title = "Select a folder",
+        IsFolderPicker = true
+    };
 
-        private void btnBrowse_Click(object sender, RoutedEventArgs e)
-        {
-            using (var dialog = new FolderBrowserDialog())
-            {
-                dialog.Description = "Select a folder:";
-                dialog.ShowNewFolderButton = true;
+    if (dlg.ShowDialog() == CommonFileDialogResult.Ok)
+    {
+        txtFolderPath.Text = dlg.FileName;
+    }
 
-                // Preselect folder if TextBox has valid path
-            if (System.IO.Directory.Exists(txtFolderPath.Text.Trim()))
-                dialog.SelectedPath = txtFolderPath.Text.Trim();
-
-                DialogResult result = dialog.ShowDialog();
-
-                if (result == System.Windows.Forms.DialogResult.OK)
-                {
-                    txtFolderPath.Text = dialog.SelectedPath;
-                }
-            }
-        }
-
+    this.Activate(); // ensure WPF window stays on top
+}
 
         private void OKButton_Click(object sender, RoutedEventArgs e)
         {
@@ -142,6 +146,9 @@ private void txtFilter_TextChanged(object sender, TextChangedEventArgs e)
             if (!Views.Any(v => v.IsSelected))
             {
                 TaskDialog.Show("Warning", "Please select at least one view.");
+                            this.Topmost = true;
+            this.Activate();
+            this.Topmost = false; 
                 return;
             }
             DialogResult = true;
@@ -150,6 +157,7 @@ private void txtFilter_TextChanged(object sender, TextChangedEventArgs e)
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
+ 
             DialogResult = false;
             Close();
         }

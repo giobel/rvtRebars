@@ -69,10 +69,10 @@
     <EmbeddedResource Include="Resources\duplicate.png" />
     <EmbeddedResource Include="Resources\navis.png" />
 
-  <EmbeddedResource Include="Resources\revXcelExport32.png"/>
-  <EmbeddedResource Include="Resources\revXcelExport48.png"/>
-  <EmbeddedResource Include="Resources\revXcelImport32.png"/>
-  <EmbeddedResource Include="Resources\revXcelImport48.png"/>
+  <EmbeddedResource Include="Resources\revXcelExport32.png" />
+  <EmbeddedResource Include="Resources\revXcelExport48.png" />
+  <EmbeddedResource Include="Resources\revXcelImport32.png" />
+  <EmbeddedResource Include="Resources\revXcelImport48.png" />
 
 
 
@@ -84,13 +84,17 @@
   </ItemGroup>
   
 <ItemGroup>
-  <Resource Include="Resources\addToSelection.png"/>
-  <Resource Include="Resources\binoculars.png"/>
-  <Resource Include="Resources\rainbow.png"/>
-  <Resource Include="Resources\shuffle.png"/>
+  <Resource Include="Resources\addToSelection.png" />
+  <Resource Include="Resources\binoculars.png" />
+  <Resource Include="Resources\rainbow.png" />
+  <Resource Include="Resources\shuffle.png" />
 
 
   
+</ItemGroup>
+  
+<ItemGroup>
+  <PackageReference Include="WindowsAPICodePack.Shell.CommonFileDialogs" Version="1.1.5" />
 </ItemGroup>  
 
   <!-- <Target Name="PostBuild" AfterTargets="PostBuildEvent">

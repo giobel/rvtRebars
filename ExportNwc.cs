@@ -3,6 +3,7 @@ using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -32,7 +33,7 @@ namespace rvtRebars
 
             if (!views3D.Any())
             {
-                TaskDialog.Show("Export", "No 3D views found.");
+                TaskDialog.Show("Warning", "No 3D views found.");
                 return Result.Cancelled;
             }
 
@@ -48,7 +49,7 @@ namespace rvtRebars
             var selectedViews = window.Views.Where(v => v.IsSelected).Select(v => v.View).ToList();
             if (!selectedViews.Any())
             {
-                TaskDialog.Show("Export", "No views selected.");
+                TaskDialog.Show("Warning", "No views selected.");
                 return Result.Cancelled;
             }
 
@@ -59,7 +60,7 @@ namespace rvtRebars
 
 
 
-            string errors = "";
+            // string errors = "";
             int results = 0;
 
              foreach (var view in selectedViews)
@@ -84,14 +85,45 @@ namespace rvtRebars
             }
             catch (Exception ex)
             {
-                errors += ex.Message + Environment.NewLine;
+                // errors += ex.Message + Environment.NewLine;
+                results --;
                 //TaskDialog.Show("Error", $"Failed to export view {view.Name}:\n{ex.Message}");
             }
-        }
-            TaskDialog.Show("Export", $"{results} view(s) exported");
+            }
+
+            ShowExportFinishedDialog(outputFolder, results);
 
             return Result.Succeeded;
         }
+
+
+private void ShowExportFinishedDialog(string outputFolder, int results)
+{
+    var td = new TaskDialog("Export Complete");
+
+    td.MainInstruction = $"{results} view(s) exported.";
+    td.MainContent = $"Output folder: {outputFolder}";
+
+    // Add command link button
+    td.AddCommandLink(TaskDialogCommandLinkId.CommandLink1, "Open Output Folder");
+    
+    // Add a Close button
+    td.CommonButtons = TaskDialogCommonButtons.Close;
+
+    var result = td.Show();
+
+    if (result == TaskDialogResult.CommandLink1)
+    {
+        // Open the folder
+        if (System.IO.Directory.Exists(outputFolder))
+            Process.Start(new ProcessStartInfo()
+            {
+                FileName = outputFolder,
+                UseShellExecute = true,
+                Verb = "open"
+            });
+    }
+}
     }
 }
 
