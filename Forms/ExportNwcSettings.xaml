@@ -6,12 +6,63 @@
         xmlns:local="clr-namespace:rvtRebars"
         mc:Ignorable="d"
         Title="NWC Export Settings" Height="250" Width="411"
-        SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen">
+        SizeToContent="Height" WindowStartupLocation="CenterScreen">
 
         <!-- Mapping File Row -->
 
     <StackPanel Margin="10">
         <TextBlock Text="Select 3D Views to Export:" FontWeight="Bold" Margin="0,0,0,10"/>
+
+<Grid Margin="0,0,0,8">
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="30"/>
+        <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
+
+    <!-- Search Icon -->
+    <TextBlock Grid.Column="0"
+               Text="&#xE721;"
+               FontFamily="Segoe MDL2 Assets"
+               FontSize="16"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Center"
+               Foreground="Gray"/>
+
+    <!-- Filter TextBox -->
+    <TextBox Name="txtFilter"
+             Grid.Column="1"
+             Height="25"
+             TextChanged="txtFilter_TextChanged"
+             ToolTip="Type to filter views..."/>
+</Grid>
+
+
+<StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+
+    <TextBlock Text="Check All (Filtered)"
+               Margin="0,0,15,0"
+               Cursor="Hand"
+               Foreground="Blue"
+               MouseLeftButtonUp="CheckAllFiltered_Click">
+        <TextBlock.TextDecorations>
+            <TextDecorationCollection>
+                <TextDecoration Location="Underline"/>
+            </TextDecorationCollection>
+        </TextBlock.TextDecorations>
+    </TextBlock>
+
+    <TextBlock Text="Uncheck All (Filtered)"
+               Cursor="Hand"
+               Foreground="Blue"
+               MouseLeftButtonUp="UncheckAllFiltered_Click">
+        <TextBlock.TextDecorations>
+            <TextDecorationCollection>
+                <TextDecoration Location="Underline"/>
+            </TextDecorationCollection>
+        </TextBlock.TextDecorations>
+    </TextBlock>
+
+</StackPanel>
 
 
     <Border BorderBrush="CadetBlue" BorderThickness="1" Padding="0">
@@ -43,7 +94,7 @@
 
                 <Button Name="btnBrowse"
                         Click="btnBrowse_Click"
-                        Width="120"
+                        Width="75"
                         Height="25"
                         Grid.Column="1">
                     Browse
@@ -53,8 +104,8 @@
 
         <!-- Save / Cancel Buttons -->
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="OK" Width="75" Margin="5" Click="OKButton_Click"/>
-            <Button Content="Cancel" Width="75" Margin="5" Click="CancelButton_Click"/>
+            <Button Content="OK" Width="75" Height="25" Margin="5" Click="OKButton_Click"/>
+            <Button Content="Cancel" Width="75" Height="25" Margin="5" Click="CancelButton_Click"/>
         </StackPanel>
     </StackPanel>
 </Window>

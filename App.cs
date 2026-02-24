@@ -197,6 +197,13 @@ namespace rvtRebars
                 {
                     MessageBox.Show("Failed to add button export sheets", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+
+                if (AddPushButton(utilities, assemblyPath, "btnNavisExport", "Export Views\n to Nwc", null, "rvtRebars.Resources.navis.png",
+"rvtRebars.ExportNwc", "Export selected 3D views to .nwc") == false)
+                {
+                    MessageBox.Show("Failed to add button export sheets", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
                 #endregion
 
 

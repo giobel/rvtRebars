@@ -67,6 +67,7 @@
     <EmbeddedResource Include="Resources\bars.png" />
     <EmbeddedResource Include="Resources\paint.png" />
     <EmbeddedResource Include="Resources\duplicate.png" />
+    <EmbeddedResource Include="Resources\navis.png" />
 
   <EmbeddedResource Include="Resources\revXcelExport32.png"/>
   <EmbeddedResource Include="Resources\revXcelExport48.png"/>
